@@ -1,0 +1,23 @@
+{
+	"name": "@aeon/vault",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./*": "./src/*.ts"
+	},
+	"scripts": {
+		"build": "tsc -b",
+		"check-types": "tsc -b",
+		"test": "bun test"
+	},
+	"dependencies": {
+		"@aeon/crypto": "workspace:*",
+		"@aeon/storage": "workspace:*",
+		"viem": "2.57.16"
+	},
+	"devDependencies": {
+		"@aeon/config": "workspace:*",
+		"@types/bun": "catalog:",
+		"typescript": "catalog:"
+	}
+}

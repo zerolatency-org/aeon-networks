@@ -183,6 +183,19 @@
         "typescript": "catalog:",
       },
     },
+    "packages/vault": {
+      "name": "@aeon/vault",
+      "dependencies": {
+        "@aeon/crypto": "workspace:*",
+        "@aeon/storage": "workspace:*",
+        "viem": "2.57.16",
+      },
+      "devDependencies": {
+        "@aeon/config": "workspace:*",
+        "@types/bun": "catalog:",
+        "typescript": "catalog:",
+      },
+    },
   },
   "catalog": {
     "@orpc/openapi": "^1.15.6",
@@ -215,6 +228,8 @@
     "@aeon/harness": ["@aeon/harness@workspace:packages/harness"],
 
     "@aeon/storage": ["@aeon/storage@workspace:packages/storage"],
+
+    "@aeon/vault": ["@aeon/vault@workspace:packages/vault"],
 
     "@ai-sdk/gateway": ["@ai-sdk/gateway@4.0.136", "", { "dependencies": { "@ai-sdk/provider": "4.0.36", "@ai-sdk/provider-utils": "5.0.75", "@vercel/oidc": "3.2.0" }, "peerDependencies": { "zod": "^3.25.76 || ^4.1.8" } }, "sha512-P851NL80P85Ee6MhblRuuCzNlQdOYU5rKmdt/Wuo5dMtkzvIHhyVZY9wtfKG3wBJUUoxHxWKsI2aR6O75o8diA=="],
 
