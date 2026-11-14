@@ -1,0 +1,946 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "a62a6928-3e56-42a8-8383-308ada74a75a",
+  "prevIds": [
+    "b745094b-16bd-45cb-aa76-76dd41d63351"
+  ],
+  "footprints": [
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "approvals"
+      ],
+      "writes": [
+        "s|tbl|public.approvals",
+        "n|tbl|public.approvals",
+        "e|tbl|public.approvals",
+        "n|rel|public.approvals",
+        "n|type|public.approvals",
+        "n|rel|public.approvals_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "job_archives"
+      ],
+      "writes": [
+        "s|tbl|public.job_archives",
+        "n|tbl|public.job_archives",
+        "e|tbl|public.job_archives",
+        "n|rel|public.job_archives",
+        "n|type|public.job_archives",
+        "n|rel|public.job_archives_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "job_verdicts"
+      ],
+      "writes": [
+        "s|tbl|public.job_verdicts",
+        "n|tbl|public.job_verdicts",
+        "e|tbl|public.job_verdicts",
+        "n|rel|public.job_verdicts",
+        "n|type|public.job_verdicts",
+        "n|rel|public.job_verdicts_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "approvals",
+        "approvals_user_status_idx"
+      ],
+      "writes": [
+        "s|idx|public.approvals_user_status_idx",
+        "n|idx|public.approvals_user_status_idx",
+        "e|idx|public.approvals_user_status_idx",
+        "n|rel|public.approvals_user_status_idx"
+      ],
+      "reads": [
+        "n|tbl|public.approvals",
+        "n|sch|public",
+        "n|col|public.approvals.user_id",
+        "n|col|public.approvals.status"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "approvals",
+        "approvals_agent_status_idx"
+      ],
+      "writes": [
+        "s|idx|public.approvals_agent_status_idx",
+        "n|idx|public.approvals_agent_status_idx",
+        "e|idx|public.approvals_agent_status_idx",
+        "n|rel|public.approvals_agent_status_idx"
+      ],
+      "reads": [
+        "n|tbl|public.approvals",
+        "n|sch|public",
+        "n|col|public.approvals.agent_id",
+        "n|col|public.approvals.status"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "approvals"
+      ],
+      "writes": [
+        "s|fk|public.approvals.approvals_user_id_user_id_fkey",
+        "n|fk|public.approvals.approvals_user_id_user_id_fkey",
+        "e|fk|public.approvals.approvals_user_id_user_id_fkey",
+        "n|con|public.approvals.approvals_user_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.approvals",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.approvals.user_id",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "approvals"
+      ],
+      "writes": [
+        "s|fk|public.approvals.approvals_agent_id_agents_id_fkey",
+        "n|fk|public.approvals.approvals_agent_id_agents_id_fkey",
+        "e|fk|public.approvals.approvals_agent_id_agents_id_fkey",
+        "n|con|public.approvals.approvals_agent_id_agents_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.approvals",
+        "n|sch|public",
+        "n|tbl|public.agents",
+        "n|sch|public",
+        "n|col|public.approvals.agent_id",
+        "n|col|public.agents.id",
+        "e|uniqueness|public.agents.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "approvals"
+      ],
+      "writes": [
+        "s|fk|public.approvals.approvals_job_id_jobs_id_fkey",
+        "n|fk|public.approvals.approvals_job_id_jobs_id_fkey",
+        "e|fk|public.approvals.approvals_job_id_jobs_id_fkey",
+        "n|con|public.approvals.approvals_job_id_jobs_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.approvals",
+        "n|sch|public",
+        "n|tbl|public.jobs",
+        "n|sch|public",
+        "n|col|public.approvals.job_id",
+        "n|col|public.jobs.id",
+        "e|uniqueness|public.jobs.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "job_archives"
+      ],
+      "writes": [
+        "s|fk|public.job_archives.job_archives_job_id_jobs_id_fkey",
+        "n|fk|public.job_archives.job_archives_job_id_jobs_id_fkey",
+        "e|fk|public.job_archives.job_archives_job_id_jobs_id_fkey",
+        "n|con|public.job_archives.job_archives_job_id_jobs_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.job_archives",
+        "n|sch|public",
+        "n|tbl|public.jobs",
+        "n|sch|public",
+        "n|col|public.job_archives.job_id",
+        "n|col|public.jobs.id",
+        "e|uniqueness|public.jobs.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "job_archives"
+      ],
+      "writes": [
+        "s|fk|public.job_archives.job_archives_agent_id_agents_id_fkey",
+        "n|fk|public.job_archives.job_archives_agent_id_agents_id_fkey",
+        "e|fk|public.job_archives.job_archives_agent_id_agents_id_fkey",
+        "n|con|public.job_archives.job_archives_agent_id_agents_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.job_archives",
+        "n|sch|public",
+        "n|tbl|public.agents",
+        "n|sch|public",
+        "n|col|public.job_archives.agent_id",
+        "n|col|public.agents.id",
+        "e|uniqueness|public.agents.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "job_verdicts"
+      ],
+      "writes": [
+        "s|fk|public.job_verdicts.job_verdicts_job_id_jobs_id_fkey",
+        "n|fk|public.job_verdicts.job_verdicts_job_id_jobs_id_fkey",
+        "e|fk|public.job_verdicts.job_verdicts_job_id_jobs_id_fkey",
+        "n|con|public.job_verdicts.job_verdicts_job_id_jobs_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.job_verdicts",
+        "n|sch|public",
+        "n|tbl|public.jobs",
+        "n|sch|public",
+        "n|col|public.job_verdicts.job_id",
+        "n|col|public.jobs.id",
+        "e|uniqueness|public.jobs.id"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "approvals",
+        "isRlsEnabled": false,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "job_archives",
+        "isRlsEnabled": false,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "job_verdicts",
+        "isRlsEnabled": false,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "kind",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "user_id",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "agent_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "job_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "token_id",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "amount",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "reason",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "state_cipher",
+        "type": "bytea",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "status",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'pending'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "requested_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "decided_by",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "decided_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_archives",
+        "name": "job_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_archives",
+        "name": "agent_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_archives",
+        "name": "entry_root",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_archives",
+        "name": "manifest_root",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_archives",
+        "name": "anchor_tx",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_archives",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_verdicts",
+        "name": "job_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_verdicts",
+        "name": "evaluator_address",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_verdicts",
+        "name": "verdict",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_verdicts",
+        "name": "checks",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'[]'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_verdicts",
+        "name": "score",
+        "type": "real",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_verdicts",
+        "name": "reasons_cipher",
+        "type": "bytea",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_verdicts",
+        "name": "model",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_verdicts",
+        "name": "decided_tx",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_verdicts",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "approvals_user_status_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "user_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          },
+          {
+            "value": "status",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "approvals_agent_status_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "agent_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          },
+          {
+            "value": "status",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "approvals_user_id_user_id_fkey",
+        "nameExplicit": false,
+        "columns": [
+          "user_id"
+        ],
+        "schemaTo": "public",
+        "tableTo": "user",
+        "columnsTo": [
+          "id"
+        ],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "approvals_agent_id_agents_id_fkey",
+        "nameExplicit": false,
+        "columns": [
+          "agent_id"
+        ],
+        "schemaTo": "public",
+        "tableTo": "agents",
+        "columnsTo": [
+          "id"
+        ],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "approvals_job_id_jobs_id_fkey",
+        "nameExplicit": false,
+        "columns": [
+          "job_id"
+        ],
+        "schemaTo": "public",
+        "tableTo": "jobs",
+        "columnsTo": [
+          "id"
+        ],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_archives",
+        "name": "job_archives_job_id_jobs_id_fkey",
+        "nameExplicit": false,
+        "columns": [
+          "job_id"
+        ],
+        "schemaTo": "public",
+        "tableTo": "jobs",
+        "columnsTo": [
+          "id"
+        ],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_archives",
+        "name": "job_archives_agent_id_agents_id_fkey",
+        "nameExplicit": false,
+        "columns": [
+          "agent_id"
+        ],
+        "schemaTo": "public",
+        "tableTo": "agents",
+        "columnsTo": [
+          "id"
+        ],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_verdicts",
+        "name": "job_verdicts_job_id_jobs_id_fkey",
+        "nameExplicit": false,
+        "columns": [
+          "job_id"
+        ],
+        "schemaTo": "public",
+        "tableTo": "jobs",
+        "columnsTo": [
+          "id"
+        ],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "approvals",
+        "name": "approvals_pkey",
+        "columns": [
+          "id"
+        ],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_archives",
+        "name": "job_archives_pkey",
+        "columns": [
+          "job_id"
+        ],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_verdicts",
+        "name": "job_verdicts_pkey",
+        "columns": [
+          "job_id"
+        ],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    }
+  ]
+}
