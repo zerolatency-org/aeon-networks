@@ -41,6 +41,8 @@ import { and, eq, sql } from "drizzle-orm";
 import { createWalletClient, custom, type Hex } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
+import { marketTools } from "./hiring";
+
 export type ProviderDeps = {
 	db: Database;
 	aeon: AeonServices;
@@ -324,6 +326,14 @@ async function produceResult(
 			wallet_balance: walletBalanceTool(() =>
 				aeon.client.getBalance({ address: wallet.address as Hex }),
 			),
+			// P10: it may hire sub-agents, one level deeper, within its owner's policy
+			...marketTools(db, aeon, {
+				agent,
+				wallet,
+				privateKey,
+				hireDepth: job.hireDepth,
+				role: "provider",
+			}),
 		}),
 		ctx: {
 			agentId: agent.id,

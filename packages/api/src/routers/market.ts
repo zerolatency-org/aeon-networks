@@ -159,68 +159,68 @@ export function profileHash(profile: {
 	);
 }
 
+const SearchInput = z.object({
+	q: z.string().trim().max(200).optional(),
+	tag: Tag.optional(),
+	minPrice: Wei.optional(),
+	maxPrice: Wei.optional(),
+	minJobs: z.coerce.number().int().min(0).optional(),
+	limit: z.coerce.number().int().min(1).max(PAGE_MAX).default(20),
+	cursor: z.string().max(200).optional(),
+});
+export type SearchInput = z.infer<typeof SearchInput>;
+
+/** Visible listings matching the filters, best first. Used by GET /market/agents and market_search. */
+export async function searchListings(db: Database, input: SearchInput) {
+	const where: (SQL | undefined)[] = [visible];
+	if (input.q) {
+		where.push(
+			sql`${listingProfiles.search} @@ websearch_to_tsquery('simple', ${input.q})`,
+		);
+	}
+	if (input.tag) where.push(arrayContains(listingProfiles.tags, [input.tag]));
+	if (input.minPrice) where.push(gte(listings.price, BigInt(input.minPrice)));
+	if (input.maxPrice) where.push(lte(listings.price, BigInt(input.maxPrice)));
+	if (input.minJobs !== undefined)
+		where.push(gte(listings.jobsCompleted, input.minJobs));
+	if (input.cursor) {
+		const c = decodeCursor(input.cursor);
+		const p = BigInt(c.p);
+		const t = BigInt(c.t);
+		where.push(
+			or(
+				lt(listings.jobsCompleted, c.j),
+				and(eq(listings.jobsCompleted, c.j), gt(listings.price, p)),
+				and(
+					eq(listings.jobsCompleted, c.j),
+					eq(listings.price, p),
+					gt(listings.tokenId, t),
+				),
+			),
+		);
+	}
+	// Most completed jobs first, then cheapest, then token id: a total order, so ties are stable.
+	const rows = await baseQuery(db)
+		.where(and(...where))
+		.orderBy(
+			desc(listings.jobsCompleted),
+			asc(listings.price),
+			asc(listings.tokenId),
+		)
+		.limit(input.limit + 1);
+	const page = rows.slice(0, input.limit);
+	const last = page.at(-1);
+	return {
+		items: page.map(view),
+		nextCursor: rows.length > input.limit && last ? encodeCursor(last) : null,
+	};
+}
+
 export const marketRouter = {
 	search: publicProcedure
 		.route({ method: "GET", path: "/market/agents" })
-		.input(
-			z.object({
-				q: z.string().trim().max(200).optional(),
-				tag: Tag.optional(),
-				minPrice: Wei.optional(),
-				maxPrice: Wei.optional(),
-				minJobs: z.coerce.number().int().min(0).optional(),
-				limit: z.coerce.number().int().min(1).max(PAGE_MAX).default(20),
-				cursor: z.string().max(200).optional(),
-			}),
-		)
-		.handler(async ({ context, input }) => {
-			const where: (SQL | undefined)[] = [visible];
-			if (input.q) {
-				where.push(
-					sql`${listingProfiles.search} @@ websearch_to_tsquery('simple', ${input.q})`,
-				);
-			}
-			if (input.tag)
-				where.push(arrayContains(listingProfiles.tags, [input.tag]));
-			if (input.minPrice)
-				where.push(gte(listings.price, BigInt(input.minPrice)));
-			if (input.maxPrice)
-				where.push(lte(listings.price, BigInt(input.maxPrice)));
-			if (input.minJobs !== undefined)
-				where.push(gte(listings.jobsCompleted, input.minJobs));
-			if (input.cursor) {
-				const c = decodeCursor(input.cursor);
-				const p = BigInt(c.p);
-				const t = BigInt(c.t);
-				where.push(
-					or(
-						lt(listings.jobsCompleted, c.j),
-						and(eq(listings.jobsCompleted, c.j), gt(listings.price, p)),
-						and(
-							eq(listings.jobsCompleted, c.j),
-							eq(listings.price, p),
-							gt(listings.tokenId, t),
-						),
-					),
-				);
-			}
-			// Most completed jobs first, then cheapest, then token id: a total order, so ties are stable.
-			const rows = await baseQuery(context.db)
-				.where(and(...where))
-				.orderBy(
-					desc(listings.jobsCompleted),
-					asc(listings.price),
-					asc(listings.tokenId),
-				)
-				.limit(input.limit + 1);
-			const page = rows.slice(0, input.limit);
-			const last = page.at(-1);
-			return {
-				items: page.map(view),
-				nextCursor:
-					rows.length > input.limit && last ? encodeCursor(last) : null,
-			};
-		}),
+		.input(SearchInput)
+		.handler(({ context, input }) => searchListings(context.db, input)),
 
 	get: publicProcedure
 		.route({ method: "GET", path: "/market/agents/{tokenId}" })

@@ -7,6 +7,7 @@ import { z } from "zod";
 import { protectedProcedure, publicProcedure } from "../index";
 import { agentsRouter } from "./agents";
 import { approvalsRouter } from "./approvals";
+import { autonomyRouter } from "./autonomy";
 import { jobsRouter } from "./jobs";
 import { marketRouter } from "./market";
 import { vaultRouter } from "./vault";
@@ -75,6 +76,8 @@ export const appRouter = {
 	approvals: approvalsRouter,
 
 	vault: vaultRouter,
+
+	autonomy: autonomyRouter,
 };
 
 export type AppRouter = typeof appRouter;

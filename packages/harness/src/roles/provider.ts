@@ -3,7 +3,8 @@ import { defineRole } from "../registry";
 export const providerRole = defineRole({
 	name: "provider",
 	maxSteps: 8,
-	tools: ["wallet_balance"],
+	// P10: a provider may hire sub-agents, within its owner's policy and the hire-depth limit
+	tools: ["wallet_balance", "market_search", "market_hire"],
 	instructions: (ctx, { persona }) =>
 		[
 			`You are Aeon agent #${ctx.tokenId}, hired for job #${ctx.jobId ?? "?"}.`,

@@ -26,6 +26,7 @@
 		"@orpc/openapi": "catalog:",
 		"@orpc/server": "catalog:",
 		"@orpc/zod": "catalog:",
+		"ai": "7.0.163",
 		"better-auth": "catalog:",
 		"hono": "^4.13.7",
 		"varlock": "catalog:",

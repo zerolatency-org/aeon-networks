@@ -34,6 +34,7 @@ export {
 	type RoleSpec,
 	type ToolRegistry,
 } from "./registry";
+export { buyerRole, quoteInstruction } from "./roles/buyer";
 export { chatRole } from "./roles/chat";
 export {
 	EVALUATOR_INSTRUCTIONS,

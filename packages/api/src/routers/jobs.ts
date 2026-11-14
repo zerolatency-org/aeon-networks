@@ -84,12 +84,18 @@ const jobView = (j: JobRow, roles: Role[]) => ({
 	roles,
 });
 
+/** The user's linked wallets plus their agents' wallets: an owner acts through both. */
 async function walletsOf(db: Database, userId: string): Promise<string[]> {
-	const rows = await db
+	const linked = await db
 		.select({ address: walletAddress.address })
 		.from(walletAddress)
 		.where(eq(walletAddress.userId, userId));
-	return rows.map((r) => r.address.toLowerCase());
+	const theirAgents = await db
+		.select({ address: agentWallets.address })
+		.from(agentWallets)
+		.innerJoin(agents, eq(agents.id, agentWallets.agentId))
+		.where(eq(agents.ownerUserId, userId));
+	return [...linked, ...theirAgents].map((r) => r.address.toLowerCase());
 }
 
 /** What the user is to this job: client, provider (owns the hired agent) and/or evaluator. */

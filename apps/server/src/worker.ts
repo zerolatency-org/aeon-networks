@@ -1,11 +1,14 @@
 // apps/server/src/worker.ts
 // Background process. The indexer keeps Postgres in step with the chain; the provider
-// works hired jobs; the evaluator verifies, pays and archives; the keeper settles silent
-// jobs; the sweeper empties the mailbox. Run: cd apps/server && bun run worker
+// works hired jobs; the evaluator verifies, pays and archives; the buyer acts on owners'
+// instructions and approved hires; the keeper settles silent jobs; the sweeper empties
+// the mailbox. Run: cd apps/server && bun run worker
 import { privateKeyToAccount } from "viem/accounts";
 
+import { runBuyerOnce } from "./buyer";
 import { ENV } from "./env.server";
 import { runEvaluatorOnce } from "./evaluator";
+import { runApprovedHiresOnce } from "./hiring";
 import { runIndexer } from "./indexer/indexer";
 import { runKeeperOnce } from "./keeper";
 import { runProviderOnce } from "./provider";
@@ -74,6 +77,13 @@ const loops = [
 		if (out) console.log(`evaluator: job ${out.jobId} ${out.status}`);
 		return out !== null;
 	}),
+	loop("buyer", 2_000, async () => {
+		const task = await runBuyerOnce({ db, aeon: services });
+		if (task) console.log(`buyer: task ${task.taskId} ${task.status}`);
+		const hire = await runApprovedHiresOnce(db, services);
+		if (hire) console.log(`buyer: approved hire ${hire.approvalId} done`);
+		return task !== null || hire !== null;
+	}),
 	loop("sweeper", 5 * 60_000, async () => {
 		const swept = await runSweeperOnce(db);
 		if (swept.deliveries || swept.approvals)
@@ -98,7 +108,7 @@ if (ENV.KEEPER_PRIVATE_KEY) {
 }
 
 console.log(
-	`worker: chain ${deployment.chainId}, indexer + provider + evaluator + sweeper${ENV.KEEPER_PRIVATE_KEY ? " + keeper" : ""}${verifierKey ? " (Aeon Verifier on)" : ""}`,
+	`worker: chain ${deployment.chainId}, indexer + provider + evaluator + buyer + sweeper${ENV.KEEPER_PRIVATE_KEY ? " + keeper" : ""}${verifierKey ? " (Aeon Verifier on)" : ""}`,
 );
 await Promise.all(loops);
 process.exit(0);
