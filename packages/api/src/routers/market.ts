@@ -242,6 +242,8 @@ export const marketRouter = {
 								chainId: aeon.deployment.chainId,
 								escrow: aeon.deployment.escrow,
 								agentPublicKey: wallet.publicKey,
+								// a neutral evaluator the client may name instead of its own agent
+								verifier: aeon.verifier ?? null,
 							}
 						: null,
 			};

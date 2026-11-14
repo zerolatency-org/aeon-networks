@@ -28,6 +28,7 @@ import {
 	CostMeter,
 	createRoleAgent,
 	defineTools,
+	parseTaskSpec,
 	providerRole,
 	quoteTask,
 	requireModel,
@@ -337,7 +338,9 @@ async function produceResult(
 		meter,
 		persona,
 	});
-	const output = await provider.generate({ prompt: quoteTask(text) });
+	// a TaskSpec (P9) carries the prompt plus acceptance rules; plain text is the prompt
+	const spec = parseTaskSpec(text);
+	const output = await provider.generate({ prompt: quoteTask(spec.prompt) });
 	await meter.settled();
 	await db.insert(usageEvents).values({
 		userId: agent.ownerUserId,

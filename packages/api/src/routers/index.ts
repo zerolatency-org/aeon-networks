@@ -6,8 +6,10 @@ import { z } from "zod";
 
 import { protectedProcedure, publicProcedure } from "../index";
 import { agentsRouter } from "./agents";
+import { approvalsRouter } from "./approvals";
 import { jobsRouter } from "./jobs";
 import { marketRouter } from "./market";
+import { vaultRouter } from "./vault";
 
 export const appRouter = {
 	healthCheck: publicProcedure
@@ -69,6 +71,10 @@ export const appRouter = {
 	market: marketRouter,
 
 	jobs: jobsRouter,
+
+	approvals: approvalsRouter,
+
+	vault: vaultRouter,
 };
 
 export type AppRouter = typeof appRouter;

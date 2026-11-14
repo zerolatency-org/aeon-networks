@@ -23,6 +23,12 @@
 		},
 		{
 			"path": "../harness"
+		},
+		{
+			"path": "../storage"
+		},
+		{
+			"path": "../vault"
 		}
 	]
 }

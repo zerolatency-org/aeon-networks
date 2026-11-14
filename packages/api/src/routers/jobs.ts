@@ -13,9 +13,10 @@ import type { Database } from "@aeon/db";
 import { agents, agentWallets } from "@aeon/db/schema/aeon";
 import { walletAddress } from "@aeon/db/schema/auth";
 import { jobs } from "@aeon/db/schema/chain";
+import { jobVerdicts } from "@aeon/db/schema/evaluation";
 import { jobDeliveries, jobRuns } from "@aeon/db/schema/hiring";
 import { ORPCError } from "@orpc/server";
-import { and, desc, eq, inArray, isNull, or, sum } from "drizzle-orm";
+import { and, desc, eq, inArray, isNull, or, sql, sum } from "drizzle-orm";
 import { encodeFunctionData, type Hex, parseEventLogs } from "viem";
 import { z } from "zod";
 
@@ -573,5 +574,65 @@ export const jobsRouter = {
 					}),
 				},
 			};
+		}),
+
+	verdict: walletProcedure
+		.route({ method: "GET", path: "/jobs/{jobId}/verdict" })
+		.input(z.object({ jobId: JobId }))
+		.handler(async ({ context, input }) => {
+			const { job } = await partyJob(
+				context.db,
+				context.session.user.id,
+				input.jobId,
+			);
+			const [v] = await context.db
+				.select()
+				.from(jobVerdicts)
+				.where(eq(jobVerdicts.jobId, job.id));
+			if (!v) throw fail("NOT_FOUND", 404, "No verdict yet");
+			return {
+				verdict: v.verdict,
+				checks: v.checks,
+				score: v.score,
+				model: v.model,
+				decidedTx: v.decidedTx,
+				// the model's reasons, readable only by the job's parties
+				reasons: v.reasonsCipher
+					? (JSON.parse(
+							Buffer.from(v.reasonsCipher).toString("utf8"),
+						) as Envelope)
+					: null,
+				createdAt: v.createdAt.toISOString(),
+			};
+		}),
+
+	evaluate: walletProcedure
+		.route({ method: "POST", path: "/jobs/{jobId}/evaluate" })
+		.input(z.object({ jobId: JobId }))
+		.handler(async ({ context, input }) => {
+			const { job, roles } = await partyJob(
+				context.db,
+				context.session.user.id,
+				input.jobId,
+			);
+			if (!roles.includes("client") && !roles.includes("evaluator")) {
+				throw fail("FORBIDDEN", 403, "Only the client or evaluator");
+			}
+			if (job.state !== "submitted") throw fail("NOT_SUBMITTED", 409);
+			// (re)queue the evaluator run; a run that already decided is left alone
+			await context.db
+				.insert(jobRuns)
+				.values({ jobId: job.id, role: "evaluator" })
+				.onConflictDoUpdate({
+					target: [jobRuns.jobId, jobRuns.role],
+					set: {
+						status: "queued",
+						attempts: 0,
+						lockedUntil: null,
+						errorCode: null,
+					},
+					setWhere: sql`${jobRuns.status} = 'failed'`,
+				});
+			return { queued: true };
 		}),
 };

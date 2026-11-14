@@ -270,14 +270,24 @@ export const agentsRouter = {
 		.route({ method: "GET", path: "/agents" })
 		.handler(async ({ context }) => {
 			const rows = await context.db
-				.select({ agent: agents, wallet: agentWallets.address })
+				.select({
+					agent: agents,
+					wallet: agentWallets.address,
+					publicKey: agentWallets.publicKey,
+				})
 				.from(agents)
 				.leftJoin(agentWallets, eq(agentWallets.agentId, agents.id))
 				.where(eq(agents.ownerUserId, context.session.user.id));
 			const list = await Promise.all(
-				rows.map(async (r) =>
-					agentView(r.agent, r.wallet, await balanceOf(context.aeon, r.wallet)),
-				),
+				rows.map(async (r) => ({
+					...agentView(
+						r.agent,
+						r.wallet,
+						await balanceOf(context.aeon, r.wallet),
+					),
+					// lets the owner's client encrypt for this agent (e.g. as evaluator)
+					agentPublicKey: r.publicKey,
+				})),
 			);
 			return { agents: list };
 		}),
