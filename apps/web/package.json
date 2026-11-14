@@ -14,6 +14,7 @@
 	"dependencies": {
 		"@aeon/api": "workspace:*",
 		"@aeon/chain": "workspace:*",
+		"@dicebear/collection": "^9.4.2",
 		"@dicebear/core": "9.4.2",
 		"@dicebear/open-peeps": "^9.4.2",
 		"@orpc/client": "1.15.6",
