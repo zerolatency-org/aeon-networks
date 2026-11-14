@@ -27,3 +27,7 @@ depth = 32
 line_length = 100
 tab_width = 4
 bracket_spacing = true
+
+[lint]
+# Escrow timers are minutes to days long; validator timestamp drift (seconds) does not matter.
+exclude_lints = ["block-timestamp"]
