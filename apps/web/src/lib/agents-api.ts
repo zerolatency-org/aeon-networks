@@ -2,6 +2,7 @@
 // The agents calls. Each one returns checked data or throws ApiError(code, status).
 import {
 	type AgentView,
+	type AvatarChoice,
 	type Confirmed,
 	type PolicyInput,
 	type Prepared,
@@ -11,6 +12,7 @@ import {
 	parsePolicy,
 	parsePrepared,
 } from "./agents-parse";
+import { parseAvatarSaved, toAvatarBody } from "./avatar-choice";
 import { ApiError } from "./siwe-api";
 
 type Fetch = (input: string, init?: RequestInit) => Promise<Response>;
@@ -129,5 +131,20 @@ export function setPolicy(
 		`/api/agents/${encodeURIComponent(id)}/policy`,
 		parsePolicy,
 		policy,
+	);
+}
+
+/** Saves the face the owner picked. The mint call has no avatar, so this runs right after confirm. */
+export function setAvatar(
+	id: string,
+	choice: AvatarChoice,
+	fetchImpl: Fetch = defaultFetch,
+): Promise<AvatarChoice> {
+	return request(
+		fetchImpl,
+		"PUT",
+		`/api/agents/${encodeURIComponent(id)}/avatar`,
+		parseAvatarSaved,
+		toAvatarBody(choice),
 	);
 }

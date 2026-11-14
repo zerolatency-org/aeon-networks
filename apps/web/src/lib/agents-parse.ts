@@ -127,8 +127,7 @@ export function parseConfirmed(json: unknown): Confirmed | null {
 /** The face the owner picked in the wizard. */
 export type AvatarChoice =
 	| { kind: "preset"; id: string }
-	| { kind: "dicebear"; seed: string; bg: string }
-	| { kind: "upload"; mediaId: string };
+	| { kind: "dicebear"; seed: string; bg: string };
 
 export type PolicyInput = {
 	perJobCap: string;
