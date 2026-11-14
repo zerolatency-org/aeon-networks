@@ -14,12 +14,11 @@ import { shouldRetry } from "@/lib/retry";
 import { AgentFace } from "./agent-face";
 import { card, quiet } from "./styles";
 // import { ActivityTab } from "./tabs/activity-tab";
-// import { ListingTab } from "./tabs/listing-tab";
+import { ListingTab } from "./tabs/listing-tab";
 // import { MemoryTab } from "./tabs/memory-tab";
 import { OverviewTab } from "./tabs/overview-tab";
-
 // import { PolicyTab } from "./tabs/policy-tab";
-// import { WalletTab } from "./tabs/wallet-tab";
+import { WalletTab } from "./tabs/wallet-tab";
 
 const TONE = { ok: "text-moss", warn: "text-ember" } as const;
 
@@ -96,8 +95,8 @@ export function AgentPage({ id, tab }: { id: string; tab: TabId }) {
 			</nav>
 
 			{tab === "overview" && <OverviewTab agent={agent} />}
-			{/* {tab === "wallet" && <WalletTab agent={agent} />} */}
-			{/* {tab === "listing" && <ListingTab agent={agent} />} */}
+			{tab === "wallet" && <WalletTab agent={agent} />}
+			{tab === "listing" && <ListingTab agent={agent} />}
 			{/* {tab === "policy" && <PolicyTab agent={agent} />} */}
 			{/* {tab === "memory" && <MemoryTab />} */}
 			{/* {tab === "activity" && <ActivityTab />} */}
