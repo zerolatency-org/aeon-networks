@@ -19,10 +19,11 @@ describe("navbar rules", () => {
 		expect(isActive("/settings", "/agents")).toBe(false);
 	});
 
-	test("login and the lab draw their own header, every other page gets the navbar", () => {
+	test("marketing, login and the lab draw their own header", () => {
 		expect(showNavbar("/login")).toBe(false);
 		expect(showNavbar("/lab")).toBe(false);
-		expect(showNavbar("/")).toBe(true);
+		expect(showNavbar("/")).toBe(false);
+		expect(showNavbar("/how-it-works")).toBe(false);
 		expect(showNavbar("/agents")).toBe(true);
 		expect(showNavbar("/labs")).toBe(true);
 	});

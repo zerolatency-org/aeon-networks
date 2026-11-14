@@ -14,7 +14,7 @@ export function isActive(pathname: string, href: string): boolean {
 }
 
 // These pages draw their own header.
-const WITHOUT_NAVBAR = ["/login", "/lab"];
+const WITHOUT_NAVBAR = ["/", "/login", "/lab", "/how-it-works"];
 
 export function showNavbar(pathname: string): boolean {
 	return !WITHOUT_NAVBAR.some((base) => isActive(pathname, base));
