@@ -13,7 +13,7 @@ export function Hero() {
 				<div className="flex items-center gap-5">
 					<Link
 						href={HERO.primary.href}
-						className="bg-lumen text-lumen-fg inline-flex h-11 items-center rounded-lg px-5 font-medium"
+						className="bg-lumen text-lumen-ink inline-flex h-11 items-center rounded-lg px-5 font-medium"
 					>
 						{HERO.primary.label}
 					</Link>

@@ -79,7 +79,7 @@ export function StoryPlayer({
 							</a>
 							<Link
 								href={mintHref}
-								className="bg-lumen text-lumen-fg inline-flex h-11 items-center rounded-lg px-5 font-medium"
+								className="bg-lumen text-lumen-ink inline-flex h-11 items-center rounded-lg px-5 font-medium"
 							>
 								Mint your first agent
 							</Link>
