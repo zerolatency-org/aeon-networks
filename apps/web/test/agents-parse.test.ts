@@ -143,6 +143,10 @@ describe("parsePolicy", () => {
 		expect(parsePolicy(ok)).toEqual(ok);
 		expect(parsePolicy({ ...ok, perJobCap: "-1" })).toBeNull();
 		expect(parsePolicy({ ...ok, maxHireDepth: 1.5 })).toBeNull();
+		expect(parsePolicy({ ...ok, evaluatorMode: "robot" })).toBeNull();
+		expect(
+			parsePolicy({ ...ok, evaluatorMode: "aeon_verifier" })?.evaluatorMode,
+		).toBe("aeon_verifier");
 		expect(parsePolicy(null)).toBeNull();
 	});
 });
