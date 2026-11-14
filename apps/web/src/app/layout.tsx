@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 			suppressHydrationWarning
 			className={`${serif.variable} ${sans.variable} ${mono.variable}`}
 		>
-			<body>
+			<body suppressHydrationWarning>
 				<ThemeProvider>
 					<AppProviders>
 						<Navbar />

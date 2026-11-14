@@ -145,7 +145,7 @@ export function JobScene() {
 
 		const timer = setInterval(() => {
 			setActiveStepIndex((prev) => (prev + 1) % JOB_STEPS.length);
-		}, 1600);
+		}, 1400);
 
 		return () => clearInterval(timer);
 	}, [isPlaying, isInView]);
@@ -352,7 +352,7 @@ export function JobScene() {
 											>
 												<Icon size={16} weight="duotone" />
 											</div>
-											<h3 className="text-fg font-serif text-base leading-tight font-semibold">
+											<h3 className="text-fg font-sans text-sm leading-tight font-semibold">
 												{lane.label}
 											</h3>
 										</div>
@@ -472,7 +472,7 @@ export function JobScene() {
 							{/* Architectural Capability & Guarantee Block (Fills empty space with authentic specs) */}
 							<div className="bg-surface-2/40 border-border/60 mt-4 rounded-xl border p-2.5">
 								<div className="flex items-center justify-between gap-1">
-									<span className="text-fg font-serif text-xs font-semibold">
+									<span className="text-fg font-sans text-xs font-semibold">
 										{spec.guaranteeTitle}
 									</span>
 									<span className="text-fg-3 font-mono text-[9px] tracking-wider uppercase">
@@ -502,7 +502,7 @@ export function JobScene() {
 					</div>
 					<div>
 						<div className="flex flex-wrap items-center gap-2">
-							<h3 className="text-fg font-serif text-base font-semibold">
+							<h3 className="text-fg font-sans text-sm font-semibold">
 								{current.title}
 							</h3>
 							<span className="text-fg-3 text-xs">·</span>

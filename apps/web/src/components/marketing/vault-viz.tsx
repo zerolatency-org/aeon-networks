@@ -108,7 +108,7 @@ export function VaultViz({ state }: { state: VaultState }) {
 									)}
 								</div>
 								<div>
-									<h4 className="text-fg font-serif text-base leading-tight font-semibold">
+									<h4 className="text-fg font-sans text-sm leading-tight font-semibold">
 										This Device
 									</h4>
 									<p className="text-fg-3 text-[11px]">Client Key & Memory</p>
@@ -211,7 +211,7 @@ export function VaultViz({ state }: { state: VaultState }) {
 									<Database size={18} weight="duotone" />
 								</div>
 								<div>
-									<h4 className="text-fg font-serif text-base leading-tight font-semibold">
+									<h4 className="text-fg font-sans text-sm leading-tight font-semibold">
 										0G Storage
 									</h4>
 									<p className="text-fg-3 text-[11px]">
@@ -289,7 +289,7 @@ export function VaultViz({ state }: { state: VaultState }) {
 									<Coins size={18} weight="duotone" />
 								</div>
 								<div>
-									<h4 className="text-fg font-serif text-base leading-tight font-semibold">
+									<h4 className="text-fg font-sans text-sm leading-tight font-semibold">
 										0G Chain
 									</h4>
 									<p className="text-fg-3 text-[11px]">
@@ -342,7 +342,7 @@ export function VaultViz({ state }: { state: VaultState }) {
 
 			{/* Phase Caption & Cryptographic Guarantee Banner */}
 			<figcaption className="bg-surface-1 border-border rounded-xl border p-4 text-center shadow-xs">
-				<p className="text-fg font-serif text-base font-semibold">
+				<p className="text-fg font-sans text-sm font-semibold">
 					{phaseCaption(state)}
 				</p>
 				<p className="text-fg-3 mt-1 text-xs">
