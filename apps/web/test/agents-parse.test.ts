@@ -9,11 +9,17 @@ import {
 	parsePolicy,
 	parsePrepared,
 	parseTx,
+	type TxRequest,
 } from "@/lib/agents-parse";
 import { ApiError } from "@/lib/siwe-api";
 
 const WALLET = "0x3eb2c1f5d8a94e6b7c0d1e2f3a4b5c6d7e8fa2ab";
-const tx = { chainId: 16602, to: WALLET, value: "1000", data: "0xabcd" };
+const tx: TxRequest = {
+	chainId: 16602,
+	to: WALLET,
+	value: "1000",
+	data: "0xabcd",
+};
 const agent = {
 	id: "5c1e0a52-0000-4000-8000-000000000001",
 	tokenId: "7",
