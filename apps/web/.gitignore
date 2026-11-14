@@ -1,0 +1,7 @@
+# apps/web/.gitignore
+.next/
+node_modules/
+next-env.d.ts
+test-results/
+playwright-report/
+.env
