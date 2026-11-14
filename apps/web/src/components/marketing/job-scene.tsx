@@ -340,11 +340,11 @@ export function JobScene() {
 							{/* Column Header: Actor Identity */}
 							<div>
 								<div className="border-border/60 border-b pb-3">
-									<div className="flex items-center justify-between gap-2">
-										<div className="flex items-center gap-2">
+									<div className="flex items-start justify-between gap-2">
+										<div className="flex min-w-0 items-center gap-2.5">
 											<div
 												className={cn(
-													"rounded-lg p-1.5 transition-colors",
+													"shrink-0 rounded-lg p-2 transition-colors",
 													isLaneActive
 														? "bg-lumen text-lumen-ink"
 														: "bg-surface-2 text-fg-2",
@@ -352,24 +352,56 @@ export function JobScene() {
 											>
 												<Icon size={16} weight="duotone" />
 											</div>
-											<h3 className="text-fg font-sans text-sm leading-tight font-semibold">
-												{lane.label}
-											</h3>
+											<div className="min-w-0">
+												<h3 className="text-fg truncate font-sans text-sm leading-tight font-semibold">
+													{lane.label}
+												</h3>
+												<span className="text-fg-3 mt-0.5 block truncate font-mono text-[10px] tracking-wider uppercase">
+													{spec.roleBadge}
+												</span>
+											</div>
 										</div>
-										<Badge
-											tone={isLaneActive ? "live" : "neutral"}
-											className="font-mono text-[10px] tracking-wider"
-										>
-											{spec.roleBadge}
-										</Badge>
+										{isLaneActive && (
+											<span className="bg-lumen/15 text-lumen-fg border-lumen/40 shrink-0 rounded border px-1.5 py-0.5 font-mono text-[9px] font-bold tracking-wider uppercase">
+												Live
+											</span>
+										)}
 									</div>
-									<p className="text-fg-3 mt-1.5 text-xs leading-normal">
+									<p className="text-fg-3 mt-2 text-xs leading-normal">
 										{lane.note}
 									</p>
 								</div>
 
 								{/* Steps Pipeline within this Actor */}
 								<div className="mt-3.5 space-y-2.5">
+									{/* Standby Banner for Owner before step 10 */}
+									{lane.id === "owner" && (
+										<div className="bg-surface-1/40 border-border/40 text-fg-3 rounded-xl border border-dashed p-3 text-left">
+											<div className="flex items-center gap-1.5 font-mono text-[9px] tracking-wider uppercase">
+												<span className="bg-surface-3 size-1.5 rounded-full" />
+												<span>Client Standby · Steps 01–09</span>
+											</div>
+											<p className="text-fg-3/80 mt-1 text-[11px] leading-snug">
+												Payload sealed with client AES-256 key. Key stays in
+												device memory until local archive.
+											</p>
+										</div>
+									)}
+
+									{/* Standby Banner for Verifier before step 08 */}
+									{lane.id === "verifier" && (
+										<div className="bg-surface-1/40 border-border/40 text-fg-3 rounded-xl border border-dashed p-3 text-left">
+											<div className="flex items-center gap-1.5 font-mono text-[9px] tracking-wider uppercase">
+												<span className="bg-surface-3 size-1.5 rounded-full" />
+												<span>Consensus Standby · Steps 01–07</span>
+											</div>
+											<p className="text-fg-3/80 mt-1 text-[11px] leading-snug">
+												Assertion test runner standing by on 0G Consensus to
+												inspect provider output.
+											</p>
+										</div>
+									)}
+
 									{laneSteps.map((s) => {
 										const stepIdx = JOB_STEPS.findIndex(
 											(item) => item.id === s.id,
@@ -380,109 +412,124 @@ export function JobScene() {
 										const movesInfo = MOVE_CONFIG[s.moves];
 
 										return (
-											<button
-												key={s.id}
-												type="button"
-												onClick={() => handleSelectStep(stepIdx)}
-												aria-label={`Step ${s.n}: ${s.title}`}
-												className={cn(
-													"w-full cursor-pointer rounded-xl border p-3 text-left transition-all duration-200 outline-none",
-													isActive
-														? "bg-surface-2 border-lumen ring-lumen/40 shadow-sm ring-1"
-														: isDone
-															? "bg-surface-1/90 border-border hover:border-border-strong text-fg-2"
-															: "bg-surface-1/40 border-border/40 text-fg-3 hover:border-border hover:bg-surface-1",
-												)}
-											>
-												{/* Step Number & Title Header */}
-												<div className="flex items-center justify-between gap-2">
-													<div className="flex items-center gap-2">
-														<span
-															className={cn(
-																"rounded px-1.5 py-0.5 font-mono text-[11px] font-semibold",
-																isActive
-																	? "bg-lumen text-lumen-ink"
-																	: isDone
-																		? "bg-surface-3 text-fg-2"
-																		: "bg-surface-2 text-fg-3",
-															)}
-														>
-															{s.n < 10 ? `0${s.n}` : s.n}
-														</span>
-														<span
-															className={cn(
-																"text-xs font-medium transition-colors",
-																isActive
-																	? "text-fg font-semibold"
-																	: isDone
-																		? "text-fg"
-																		: "text-fg-3",
-															)}
-														>
-															{s.title}
-														</span>
-													</div>
-													{isDone ? (
-														<span className="text-moss">
-															<Check size={13} weight="bold" />
-														</span>
-													) : isActive ? (
-														<span
-															className="bg-lumen size-2 rounded-full motion-safe:animate-pulse"
-															aria-hidden="true"
-														/>
-													) : null}
-												</div>
-
-												{/* Step Description */}
-												<p
+											<div key={s.id} className="space-y-2.5">
+												<button
+													type="button"
+													onClick={() => handleSelectStep(stepIdx)}
+													aria-label={`Step ${s.n}: ${s.title}`}
 													className={cn(
-														"mt-1.5 text-[11px] leading-snug",
+														"w-full cursor-pointer rounded-xl border p-3 text-left transition-all duration-200 outline-none",
 														isActive
-															? "text-fg-2"
+															? "bg-surface-2 border-lumen ring-lumen/40 shadow-sm ring-1"
 															: isDone
-																? "text-fg-3"
-																: "text-fg-3/70",
+																? "bg-surface-1/90 border-border hover:border-border-strong text-fg-2"
+																: "bg-surface-1/40 border-border/40 text-fg-3 hover:border-border hover:bg-surface-1",
 													)}
 												>
-													{s.line}
-												</p>
+													{/* Step Number & Title Header */}
+													<div className="flex items-center justify-between gap-2">
+														<div className="flex min-w-0 items-center gap-2">
+															<span
+																className={cn(
+																	"shrink-0 rounded px-1.5 py-0.5 font-mono text-[11px] font-semibold",
+																	isActive
+																		? "bg-lumen text-lumen-ink"
+																		: isDone
+																			? "bg-surface-3 text-fg-2"
+																			: "bg-surface-2 text-fg-3",
+																)}
+															>
+																{s.n < 10 ? `0${s.n}` : s.n}
+															</span>
+															<span
+																className={cn(
+																	"truncate text-xs font-medium transition-colors",
+																	isActive
+																		? "text-fg font-semibold"
+																		: isDone
+																			? "text-fg"
+																			: "text-fg-3",
+																)}
+															>
+																{s.title}
+															</span>
+														</div>
+														{isDone ? (
+															<span className="text-moss shrink-0">
+																<Check size={13} weight="bold" />
+															</span>
+														) : isActive ? (
+															<span
+																className="bg-lumen size-2 shrink-0 rounded-full motion-safe:animate-pulse"
+																aria-hidden="true"
+															/>
+														) : null}
+													</div>
 
-												{/* Movement Badge */}
-												{s.moves !== "none" && (
-													<div className="mt-2 flex items-center gap-1.5">
-														<span
-															className={cn(
-																"inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[9px] font-medium tracking-wider uppercase",
-																movesInfo.bg,
-																movesInfo.text,
-															)}
-														>
-															<movesInfo.icon size={10} weight="fill" />
-															{s.moves === "money" ? "0G Escrow" : "Ciphertext"}
-														</span>
+													{/* Step Description */}
+													<p
+														className={cn(
+															"mt-1.5 text-[11px] leading-snug",
+															isActive
+																? "text-fg-2"
+																: isDone
+																	? "text-fg-3"
+																	: "text-fg-3/70",
+														)}
+													>
+														{s.line}
+													</p>
+
+													{/* Movement Badge */}
+													{s.moves !== "none" && (
+														<div className="mt-2 flex items-center gap-1.5">
+															<span
+																className={cn(
+																	"inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[9px] font-medium tracking-wider uppercase",
+																	movesInfo.bg,
+																	movesInfo.text,
+																)}
+															>
+																<movesInfo.icon size={10} weight="fill" />
+																{s.moves === "money"
+																	? "0G Escrow"
+																	: "Ciphertext"}
+															</span>
+														</div>
+													)}
+												</button>
+
+												{/* Middle Escrow Lock Banner for 0G Chain between step 03 and step 09 */}
+												{s.n === 3 && (
+													<div className="bg-surface-1/40 border-border/40 text-fg-3 rounded-xl border border-dashed p-2.5 text-left">
+														<div className="flex items-center gap-1.5 font-mono text-[9px] tracking-wider uppercase">
+															<span className="bg-surface-3 size-1.5 rounded-full" />
+															<span>Escrow Locked · Steps 04–08</span>
+														</div>
+														<p className="text-fg-3/80 mt-0.5 text-[10px] leading-snug">
+															Funds held trustless in Galileo EVM contract
+															pending verifier consensus check.
+														</p>
 													</div>
 												)}
-											</button>
+											</div>
 										);
 									})}
 								</div>
 							</div>
 
 							{/* Architectural Capability & Guarantee Block (Fills empty space with authentic specs) */}
-							<div className="bg-surface-2/40 border-border/60 mt-4 rounded-xl border p-2.5">
-								<div className="flex items-center justify-between gap-1">
-									<span className="text-fg font-sans text-xs font-semibold">
-										{spec.guaranteeTitle}
-									</span>
-									<span className="text-fg-3 font-mono text-[9px] tracking-wider uppercase">
-										{spec.protocolFeature}
-									</span>
-								</div>
-								<p className="text-fg-3 mt-1 text-[11px] leading-relaxed">
+							<div className="bg-surface-2/40 border-border/60 mt-4 rounded-xl border p-3">
+								<span className="text-fg-3 block font-mono text-[9px] font-semibold tracking-wider uppercase">
+									{spec.protocolFeature}
+								</span>
+								<h4 className="text-fg mt-1 font-sans text-xs leading-snug font-semibold">
+									{spec.guaranteeTitle}
+								</h4>
+								<p className="text-fg-3 mt-1.5 text-[11px] leading-relaxed">
 									{spec.guaranteeDesc}
 								</p>
-								<div className="border-border/40 text-fg-3 mt-2 border-t pt-1.5 font-mono text-[10px]">
+								<div className="border-border/40 text-fg-3 mt-2.5 border-t pt-2 font-mono text-[10px]">
 									{spec.techStack}
 								</div>
 							</div>
