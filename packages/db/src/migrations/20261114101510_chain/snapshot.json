@@ -1,0 +1,1398 @@
+{
+	"type": "diff",
+	"version": "9",
+	"dialect": "postgres",
+	"id": "0e7de283-a0b4-4f9f-9b55-c911ed240a2b",
+	"prevIds": ["0332a237-e976-4d8d-a386-071658ca36b7"],
+	"footprints": [
+		{
+			"statementType": "create_table",
+			"statementTarget": ["table", "public", "chain_events"],
+			"writes": [
+				"s|tbl|public.chain_events",
+				"n|tbl|public.chain_events",
+				"e|tbl|public.chain_events",
+				"n|rel|public.chain_events",
+				"n|type|public.chain_events",
+				"n|rel|public.chain_events_pkey"
+			],
+			"reads": ["n|sch|public"]
+		},
+		{
+			"statementType": "create_table",
+			"statementTarget": ["table", "public", "indexer_cursors"],
+			"writes": [
+				"s|tbl|public.indexer_cursors",
+				"n|tbl|public.indexer_cursors",
+				"e|tbl|public.indexer_cursors",
+				"n|rel|public.indexer_cursors",
+				"n|type|public.indexer_cursors",
+				"n|rel|public.indexer_cursors_pkey"
+			],
+			"reads": ["n|sch|public"]
+		},
+		{
+			"statementType": "create_table",
+			"statementTarget": ["table", "public", "jobs"],
+			"writes": [
+				"s|tbl|public.jobs",
+				"n|tbl|public.jobs",
+				"e|tbl|public.jobs",
+				"n|rel|public.jobs",
+				"n|type|public.jobs",
+				"n|rel|public.jobs_pkey",
+				"n|rel|public.jobs_chain_job_id_key"
+			],
+			"reads": ["n|sch|public"]
+		},
+		{
+			"statementType": "create_table",
+			"statementTarget": ["table", "public", "listings"],
+			"writes": [
+				"s|tbl|public.listings",
+				"n|tbl|public.listings",
+				"e|tbl|public.listings",
+				"n|rel|public.listings",
+				"n|type|public.listings",
+				"n|rel|public.listings_pkey"
+			],
+			"reads": ["n|sch|public"]
+		},
+		{
+			"statementType": "create_table",
+			"statementTarget": ["table", "public", "revenue_events"],
+			"writes": [
+				"s|tbl|public.revenue_events",
+				"n|tbl|public.revenue_events",
+				"e|tbl|public.revenue_events",
+				"n|rel|public.revenue_events",
+				"n|type|public.revenue_events",
+				"n|rel|public.revenue_events_pkey"
+			],
+			"reads": ["n|sch|public"]
+		},
+		{
+			"statementType": "create_index",
+			"statementTarget": [
+				"index",
+				"public",
+				"chain_events",
+				"chain_events_block_idx"
+			],
+			"writes": [
+				"s|idx|public.chain_events_block_idx",
+				"n|idx|public.chain_events_block_idx",
+				"e|idx|public.chain_events_block_idx",
+				"n|rel|public.chain_events_block_idx"
+			],
+			"reads": [
+				"n|tbl|public.chain_events",
+				"n|sch|public",
+				"n|col|public.chain_events.block_number"
+			]
+		},
+		{
+			"statementType": "create_index",
+			"statementTarget": ["index", "public", "jobs", "jobs_state_expired_idx"],
+			"writes": [
+				"s|idx|public.jobs_state_expired_idx",
+				"n|idx|public.jobs_state_expired_idx",
+				"e|idx|public.jobs_state_expired_idx",
+				"n|rel|public.jobs_state_expired_idx"
+			],
+			"reads": [
+				"n|tbl|public.jobs",
+				"n|sch|public",
+				"n|col|public.jobs.state",
+				"n|col|public.jobs.expired_at"
+			]
+		},
+		{
+			"statementType": "create_index",
+			"statementTarget": ["index", "public", "jobs", "jobs_token_state_idx"],
+			"writes": [
+				"s|idx|public.jobs_token_state_idx",
+				"n|idx|public.jobs_token_state_idx",
+				"e|idx|public.jobs_token_state_idx",
+				"n|rel|public.jobs_token_state_idx"
+			],
+			"reads": [
+				"n|tbl|public.jobs",
+				"n|sch|public",
+				"n|col|public.jobs.token_id",
+				"n|col|public.jobs.state"
+			]
+		},
+		{
+			"statementType": "create_index",
+			"statementTarget": ["index", "public", "jobs", "jobs_client_created_idx"],
+			"writes": [
+				"s|idx|public.jobs_client_created_idx",
+				"n|idx|public.jobs_client_created_idx",
+				"e|idx|public.jobs_client_created_idx",
+				"n|rel|public.jobs_client_created_idx"
+			],
+			"reads": [
+				"n|tbl|public.jobs",
+				"n|sch|public",
+				"n|col|public.jobs.client_address",
+				"n|col|public.jobs.created_at"
+			]
+		},
+		{
+			"statementType": "create_index",
+			"statementTarget": [
+				"index",
+				"public",
+				"listings",
+				"listings_active_price_idx"
+			],
+			"writes": [
+				"s|idx|public.listings_active_price_idx",
+				"n|idx|public.listings_active_price_idx",
+				"e|idx|public.listings_active_price_idx",
+				"n|rel|public.listings_active_price_idx"
+			],
+			"reads": [
+				"n|tbl|public.listings",
+				"n|sch|public",
+				"n|col|public.listings.active",
+				"n|col|public.listings.price"
+			]
+		},
+		{
+			"statementType": "create_index",
+			"statementTarget": [
+				"index",
+				"public",
+				"revenue_events",
+				"revenue_events_tx_log_uq"
+			],
+			"writes": [
+				"s|idx|public.revenue_events_tx_log_uq",
+				"n|idx|public.revenue_events_tx_log_uq",
+				"e|idx|public.revenue_events_tx_log_uq",
+				"n|rel|public.revenue_events_tx_log_uq"
+			],
+			"reads": [
+				"n|tbl|public.revenue_events",
+				"n|sch|public",
+				"n|col|public.revenue_events.tx_hash",
+				"n|col|public.revenue_events.log_index"
+			]
+		},
+		{
+			"statementType": "create_fk",
+			"statementTarget": ["table", "public", "jobs"],
+			"writes": [
+				"s|fk|public.jobs.jobs_created_by_user_id_user_id_fkey",
+				"n|fk|public.jobs.jobs_created_by_user_id_user_id_fkey",
+				"e|fk|public.jobs.jobs_created_by_user_id_user_id_fkey",
+				"n|con|public.jobs.jobs_created_by_user_id_user_id_fkey"
+			],
+			"reads": [
+				"n|tbl|public.jobs",
+				"n|sch|public",
+				"n|tbl|public.user",
+				"n|sch|public",
+				"n|col|public.jobs.created_by_user_id",
+				"n|col|public.user.id",
+				"e|uniqueness|public.user.id"
+			]
+		},
+		{
+			"statementType": "create_fk",
+			"statementTarget": ["table", "public", "jobs"],
+			"writes": [
+				"s|fk|public.jobs.jobs_client_agent_id_agents_id_fkey",
+				"n|fk|public.jobs.jobs_client_agent_id_agents_id_fkey",
+				"e|fk|public.jobs.jobs_client_agent_id_agents_id_fkey",
+				"n|con|public.jobs.jobs_client_agent_id_agents_id_fkey"
+			],
+			"reads": [
+				"n|tbl|public.jobs",
+				"n|sch|public",
+				"n|tbl|public.agents",
+				"n|sch|public",
+				"n|col|public.jobs.client_agent_id",
+				"n|col|public.agents.id",
+				"e|uniqueness|public.agents.id"
+			]
+		}
+	],
+	"deltas": [
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"name": "chain_events",
+				"isRlsEnabled": false,
+				"entityType": "tables"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"name": "indexer_cursors",
+				"isRlsEnabled": false,
+				"entityType": "tables"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"name": "jobs",
+				"isRlsEnabled": false,
+				"entityType": "tables"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"name": "listings",
+				"isRlsEnabled": false,
+				"entityType": "tables"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"name": "revenue_events",
+				"isRlsEnabled": false,
+				"entityType": "tables"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "chain_events",
+				"name": "tx_hash",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "chain_events",
+				"name": "log_index",
+				"type": "integer",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "chain_events",
+				"name": "block_number",
+				"type": "bigint",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "chain_events",
+				"name": "contract",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "chain_events",
+				"name": "event_name",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "chain_events",
+				"name": "created_at",
+				"type": "timestamp with time zone",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "now()",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "indexer_cursors",
+				"name": "name",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "indexer_cursors",
+				"name": "last_block",
+				"type": "bigint",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "indexer_cursors",
+				"name": "last_block_hash",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": false,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "indexer_cursors",
+				"name": "updated_at",
+				"type": "timestamp with time zone",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "now()",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "id",
+				"type": "uuid",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "gen_random_uuid()",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "chain_job_id",
+				"type": "numeric(78,0)",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "token_id",
+				"type": "numeric(78,0)",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "client_address",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "payee_address",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "evaluator_address",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "amount",
+				"type": "numeric(78,0)",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "state",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "task_hash",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "result_hash",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": false,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "expired_at",
+				"type": "timestamp with time zone",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "accept_window_s",
+				"type": "integer",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "submitted_at",
+				"type": "timestamp with time zone",
+				"typeSchema": null,
+				"notNull": false,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "disputed_at",
+				"type": "timestamp with time zone",
+				"typeSchema": null,
+				"notNull": false,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "settled_at",
+				"type": "timestamp with time zone",
+				"typeSchema": null,
+				"notNull": false,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "create_tx",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "last_event_block",
+				"type": "bigint",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "created_by_user_id",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": false,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "client_agent_id",
+				"type": "uuid",
+				"typeSchema": null,
+				"notNull": false,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "hire_depth",
+				"type": "integer",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "0",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "created_at",
+				"type": "timestamp with time zone",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "now()",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "listings",
+				"name": "token_id",
+				"type": "numeric(78,0)",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "listings",
+				"name": "listed_by",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "listings",
+				"name": "agent_wallet",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "listings",
+				"name": "price",
+				"type": "numeric(78,0)",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "listings",
+				"name": "active",
+				"type": "boolean",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "listings",
+				"name": "profile_hash",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "listings",
+				"name": "jobs_completed",
+				"type": "integer",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "0",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "listings",
+				"name": "jobs_disputed",
+				"type": "integer",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "0",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "listings",
+				"name": "total_settled",
+				"type": "numeric(78,0)",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "'0'",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "listings",
+				"name": "updated_block",
+				"type": "bigint",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "listings",
+				"name": "updated_at",
+				"type": "timestamp with time zone",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "now()",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "revenue_events",
+				"name": "id",
+				"type": "uuid",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "gen_random_uuid()",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "revenue_events",
+				"name": "source",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "revenue_events",
+				"name": "tx_hash",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "revenue_events",
+				"name": "log_index",
+				"type": "integer",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "revenue_events",
+				"name": "amount",
+				"type": "numeric(78,0)",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "revenue_events",
+				"name": "payer_address",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "revenue_events",
+				"name": "block_number",
+				"type": "bigint",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "revenue_events",
+				"name": "created_at",
+				"type": "timestamp with time zone",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "now()",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "chain_events",
+				"name": "chain_events_block_idx",
+				"nameExplicit": true,
+				"columns": [
+					{
+						"value": "block_number",
+						"isExpression": false,
+						"asc": true,
+						"nullsFirst": false,
+						"opclass": null
+					}
+				],
+				"isUnique": false,
+				"where": null,
+				"with": "",
+				"method": "btree",
+				"concurrently": false,
+				"entityType": "indexes"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "jobs_state_expired_idx",
+				"nameExplicit": true,
+				"columns": [
+					{
+						"value": "state",
+						"isExpression": false,
+						"asc": true,
+						"nullsFirst": false,
+						"opclass": null
+					},
+					{
+						"value": "expired_at",
+						"isExpression": false,
+						"asc": true,
+						"nullsFirst": false,
+						"opclass": null
+					}
+				],
+				"isUnique": false,
+				"where": null,
+				"with": "",
+				"method": "btree",
+				"concurrently": false,
+				"entityType": "indexes"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "jobs_token_state_idx",
+				"nameExplicit": true,
+				"columns": [
+					{
+						"value": "token_id",
+						"isExpression": false,
+						"asc": true,
+						"nullsFirst": false,
+						"opclass": null
+					},
+					{
+						"value": "state",
+						"isExpression": false,
+						"asc": true,
+						"nullsFirst": false,
+						"opclass": null
+					}
+				],
+				"isUnique": false,
+				"where": null,
+				"with": "",
+				"method": "btree",
+				"concurrently": false,
+				"entityType": "indexes"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "jobs_client_created_idx",
+				"nameExplicit": true,
+				"columns": [
+					{
+						"value": "client_address",
+						"isExpression": false,
+						"asc": true,
+						"nullsFirst": false,
+						"opclass": null
+					},
+					{
+						"value": "created_at",
+						"isExpression": false,
+						"asc": true,
+						"nullsFirst": false,
+						"opclass": null
+					}
+				],
+				"isUnique": false,
+				"where": null,
+				"with": "",
+				"method": "btree",
+				"concurrently": false,
+				"entityType": "indexes"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "listings",
+				"name": "listings_active_price_idx",
+				"nameExplicit": true,
+				"columns": [
+					{
+						"value": "active",
+						"isExpression": false,
+						"asc": true,
+						"nullsFirst": false,
+						"opclass": null
+					},
+					{
+						"value": "price",
+						"isExpression": false,
+						"asc": true,
+						"nullsFirst": false,
+						"opclass": null
+					}
+				],
+				"isUnique": false,
+				"where": null,
+				"with": "",
+				"method": "btree",
+				"concurrently": false,
+				"entityType": "indexes"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "revenue_events",
+				"name": "revenue_events_tx_log_uq",
+				"nameExplicit": true,
+				"columns": [
+					{
+						"value": "tx_hash",
+						"isExpression": false,
+						"asc": true,
+						"nullsFirst": false,
+						"opclass": null
+					},
+					{
+						"value": "log_index",
+						"isExpression": false,
+						"asc": true,
+						"nullsFirst": false,
+						"opclass": null
+					}
+				],
+				"isUnique": true,
+				"where": null,
+				"with": "",
+				"method": "btree",
+				"concurrently": false,
+				"entityType": "indexes"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "jobs_created_by_user_id_user_id_fkey",
+				"nameExplicit": false,
+				"columns": ["created_by_user_id"],
+				"schemaTo": "public",
+				"tableTo": "user",
+				"columnsTo": ["id"],
+				"onUpdate": "NO ACTION",
+				"onDelete": "SET NULL",
+				"entityType": "fks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "jobs_client_agent_id_agents_id_fkey",
+				"nameExplicit": false,
+				"columns": ["client_agent_id"],
+				"schemaTo": "public",
+				"tableTo": "agents",
+				"columnsTo": ["id"],
+				"onUpdate": "NO ACTION",
+				"onDelete": "SET NULL",
+				"entityType": "fks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "chain_events",
+				"name": "chain_events_pkey",
+				"columns": ["tx_hash", "log_index"],
+				"nameExplicit": false,
+				"entityType": "pks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "indexer_cursors",
+				"name": "indexer_cursors_pkey",
+				"columns": ["name"],
+				"nameExplicit": false,
+				"entityType": "pks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "jobs_pkey",
+				"columns": ["id"],
+				"nameExplicit": false,
+				"entityType": "pks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "listings",
+				"name": "listings_pkey",
+				"columns": ["token_id"],
+				"nameExplicit": false,
+				"entityType": "pks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "revenue_events",
+				"name": "revenue_events_pkey",
+				"columns": ["id"],
+				"nameExplicit": false,
+				"entityType": "pks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "jobs_chain_job_id_key",
+				"nameExplicit": false,
+				"columns": ["chain_job_id"],
+				"nullsNotDistinct": false,
+				"entityType": "uniques"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "jobs_client_lower",
+				"value": "\"client_address\" ~ '^0x[0-9a-f]{40}$'",
+				"entityType": "checks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "jobs_payee_lower",
+				"value": "\"payee_address\" ~ '^0x[0-9a-f]{40}$'",
+				"entityType": "checks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "jobs",
+				"name": "jobs_evaluator_lower",
+				"value": "\"evaluator_address\" ~ '^0x[0-9a-f]{40}$'",
+				"entityType": "checks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "listings",
+				"name": "listings_listed_by_lower",
+				"value": "\"listed_by\" ~ '^0x[0-9a-f]{40}$'",
+				"entityType": "checks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "listings",
+				"name": "listings_agent_wallet_lower",
+				"value": "\"agent_wallet\" ~ '^0x[0-9a-f]{40}$'",
+				"entityType": "checks"
+			}
+		}
+	]
+}
