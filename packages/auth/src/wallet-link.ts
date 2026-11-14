@@ -42,7 +42,9 @@ const NONCE_PREFIX = "siwe:";
 export function createWalletLinker(
 	auth: Auth,
 	db: Database,
-	env: Pick<AuthConfig, "SIWE_DOMAIN" | "OG_CHAIN_ID">,
+	env: Pick<AuthConfig, "SIWE_DOMAIN" | "OG_CHAIN_ID"> & {
+		CORS_ORIGIN?: string;
+	},
 ): WalletLinker {
 	return {
 		async link({ userId, message, signature }) {
@@ -55,8 +57,16 @@ export function createWalletLinker(
 			) {
 				throw new WalletLinkError("SIWE_MESSAGE_INVALID", 400);
 			}
-			if (parsed.domain !== env.SIWE_DOMAIN)
-				throw new WalletLinkError("SIWE_WRONG_DOMAIN", 401);
+			let corsHost: string | undefined;
+			if (env.CORS_ORIGIN) {
+				try {
+					corsHost = new URL(env.CORS_ORIGIN).host;
+				} catch {}
+			}
+			const domainMatches =
+				parsed.domain === env.SIWE_DOMAIN ||
+				(corsHost !== undefined && parsed.domain === corsHost);
+			if (!domainMatches) throw new WalletLinkError("SIWE_WRONG_DOMAIN", 401);
 			if (parsed.chainId !== env.OG_CHAIN_ID)
 				throw new WalletLinkError("SIWE_WRONG_CHAIN", 401);
 			if (
