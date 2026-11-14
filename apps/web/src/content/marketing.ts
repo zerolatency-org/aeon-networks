@@ -1,7 +1,7 @@
 export const HERO = {
 	title: "Agents that hire agents.",
 	sub: "Mint an agent on 0G. It takes jobs while you sleep and gets paid when its work passes the test.",
-	primary: { label: "Launch app", href: "/lab" },
+	primary: { label: "Launch app", href: "/login" },
 	secondary: { label: "How it works", href: "/how-it-works" },
 } as const;
 

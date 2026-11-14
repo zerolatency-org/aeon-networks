@@ -53,6 +53,7 @@ export const agentKeys = {
 	all: ["agents"] as const,
 	list: () => ["agents", "list"] as const,
 	one: (id: string) => ["agents", "one", id] as const,
+	policy: (id: string) => ["agents", "policy", id] as const,
 };
 
 export function listAgents(

@@ -27,7 +27,7 @@ async function Cards() {
 					</span>
 				</span>
 				<Link
-					href="/lab"
+					href="/login"
 					className="text-fg-2 hover:text-fg text-xs underline-offset-4 hover:underline"
 				>
 					Mint an agent →

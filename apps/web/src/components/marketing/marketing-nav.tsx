@@ -41,7 +41,7 @@ export function MarketingNav() {
 					</a>
 					<ThemeSwitch />
 					<Link
-						href="/lab"
+						href="/login"
 						className="bg-lumen text-lumen-ink inline-flex h-9 items-center rounded-lg px-4 font-medium transition-opacity hover:opacity-90"
 					>
 						Launch app
