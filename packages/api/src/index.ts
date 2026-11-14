@@ -2,6 +2,7 @@
 //   publicProcedure     anyone
 //   protectedProcedure  signed in (cookie or bearer token)
 //   walletProcedure     signed in AND has a linked wallet (403 WALLET_REQUIRED otherwise)
+//   aeonProcedure       walletProcedure AND the server has chain + keys + Router (503 otherwise)
 import { walletAddress } from "@aeon/db/schema/auth";
 import { ORPCError, os } from "@orpc/server";
 import { asc, desc, eq } from "drizzle-orm";
@@ -47,3 +48,15 @@ const requireWallet = o.middleware(async ({ context, next }) => {
 });
 
 export const walletProcedure = protectedProcedure.use(requireWallet);
+
+const requireAeon = o.middleware(async ({ context, next }) => {
+	if (!context.aeon) {
+		throw new ORPCError("SERVICE_UNAVAILABLE", {
+			status: 503,
+			message: "Chain, MASTER_KEY or Router is not configured on this server.",
+		});
+	}
+	return next({ context: { aeon: context.aeon } });
+});
+
+export const aeonProcedure = walletProcedure.use(requireAeon);

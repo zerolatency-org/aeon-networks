@@ -1,11 +1,14 @@
+// apps/server/src/app.ts
 // Builds the Hono app from its dependencies so tests can create it with a test
 // database and auth instance, and call routes in-process with app.request().
+
+import type { AeonServices } from "@aeon/api/context";
 import { appRouter } from "@aeon/api/routers/index";
 import type { Auth, WalletLinker } from "@aeon/auth";
 import type { Database } from "@aeon/db";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
-import { onError } from "@orpc/server";
+import { ORPCError, onError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { sql } from "drizzle-orm";
@@ -20,6 +23,8 @@ export type AppDeps = {
 	corsOrigin: string;
 	version: string;
 	logRequests?: boolean;
+	/** Chain, MASTER_KEY and Router. Without them the agent routes answer 503. */
+	aeon?: AeonServices | null;
 };
 
 export function createApp({
@@ -29,6 +34,7 @@ export function createApp({
 	corsOrigin,
 	version,
 	logRequests = true,
+	aeon = null,
 }: AppDeps) {
 	const app = new Hono();
 
@@ -62,19 +68,20 @@ export function createApp({
 				schemaConverters: [new ZodToJsonSchemaConverter()],
 			}),
 		],
-		interceptors: [onError((error) => console.error(error))],
+		interceptors: [onError(logServerError)],
 	});
 	const rpcHandler = new RPCHandler(appRouter, {
-		interceptors: [onError((error) => console.error(error))],
+		interceptors: [onError(logServerError)],
 	});
 
 	app.use("/*", async (c, next) => {
 		const session = await auth.api.getSession({ headers: c.req.raw.headers });
-		const context = { db, session, wallets };
+		const context = { db, session, wallets, aeon };
 
 		const rpc = await rpcHandler.handle(c.req.raw, { prefix: "/rpc", context });
 		if (rpc.matched) return c.newResponse(rpc.response.body, rpc.response);
 
+		// REST routes live under /api (e.g. GET /api/me); docs at GET /api
 		const api = await apiHandler.handle(c.req.raw, { prefix: "/api", context });
 		if (api.matched) return c.newResponse(api.response.body, api.response);
 
@@ -84,4 +91,10 @@ export function createApp({
 	app.get("/", (c) => c.text("OK"));
 
 	return app;
+}
+
+/** Expected 4xx answers (404, 409, ...) are not worth a stack trace; real failures are. */
+function logServerError(error: unknown) {
+	if (error instanceof ORPCError && error.status < 500) return;
+	console.error(error);
 }

@@ -11,12 +11,16 @@
 	},
 	"dependencies": {
 		"@aeon/auth": "workspace:*",
+		"@aeon/chain": "workspace:*",
+		"@aeon/crypto": "workspace:*",
 		"@aeon/db": "workspace:*",
+		"@aeon/harness": "workspace:*",
 		"@orpc/client": "^1.15.6",
 		"@orpc/openapi": "catalog:",
 		"@orpc/server": "catalog:",
 		"@orpc/zod": "catalog:",
 		"drizzle-orm": "catalog:",
+		"viem": "2.57.16",
 		"zod": "catalog:"
 	},
 	"devDependencies": {

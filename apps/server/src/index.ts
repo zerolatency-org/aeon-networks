@@ -1,6 +1,6 @@
 import { createApp } from "./app";
 import { ENV } from "./env.server";
-import { auth, db, wallets } from "./services";
+import { aeon, auth, db, wallets } from "./services";
 
 const app = createApp({
 	db,
@@ -8,6 +8,7 @@ const app = createApp({
 	wallets,
 	corsOrigin: ENV.CORS_ORIGIN,
 	version: process.env.APP_VERSION ?? "0.0.0-dev",
+	aeon,
 });
 
 export default app;

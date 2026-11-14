@@ -4,7 +4,8 @@ import { ORPCError, type RouterClient } from "@orpc/server";
 import { asc, eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { protectedProcedure, publicProcedure, walletProcedure } from "../index";
+import { protectedProcedure, publicProcedure } from "../index";
+import { agentsRouter } from "./agents";
 
 export const appRouter = {
 	healthCheck: publicProcedure
@@ -61,11 +62,7 @@ export const appRouter = {
 			}),
 	},
 
-	agents: {
-		list: walletProcedure
-			.route({ method: "GET", path: "/agents" })
-			.handler(() => ({ agents: [] as const })),
-	},
+	agents: agentsRouter,
 };
 
 export type AppRouter = typeof appRouter;
