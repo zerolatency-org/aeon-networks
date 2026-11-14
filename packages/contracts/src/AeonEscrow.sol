@@ -134,6 +134,52 @@ contract AeonEscrow is ReentrancyGuard {
         disputeLimit = c.disputeLimit;
     }
 
+    // ------------------------------------------------------------ submit and settle
+
+    /// @notice The provider commits to a result (the hash of the encrypted result envelope).
+    function submit(uint256 jobId, bytes32 resultHash) external nonReentrant {
+        Job storage job = _jobInState(jobId, State.Funded);
+        if (!_isProvider(job, msg.sender)) revert NotProvider();
+        if (block.timestamp >= job.expiredAt) revert TooLate();
+        job.state = State.Submitted;
+        job.submittedAt = uint64(block.timestamp);
+        job.resultHash = resultHash;
+        emit JobSubmitted(jobId, resultHash);
+    }
+
+    /// @notice The evaluator accepts the result. The payee gets the amount minus the fee.
+    function complete(uint256 jobId) external nonReentrant {
+        Job storage job = _jobInState(jobId, State.Submitted);
+        if (msg.sender != job.evaluator) revert NotEvaluator();
+        job.state = State.Completed;
+        (uint256 payout, uint256 fee) = _split(job.amount);
+        emit JobCompleted(jobId, payout, fee);
+        _payProvider(job.payee, payout, fee);
+        _record(job.tokenId, OUTCOME_COMPLETED, job.amount);
+    }
+
+    /// @notice The evaluator rejects the result inside the accept window.
+    function dispute(uint256 jobId) external nonReentrant {
+        Job storage job = _jobInState(jobId, State.Submitted);
+        if (msg.sender != job.evaluator) revert NotEvaluator();
+        if (block.timestamp >= uint256(job.submittedAt) + job.acceptWindow) revert TooLate();
+        job.state = State.Disputed;
+        job.disputedAt = uint64(block.timestamp);
+        emit JobDisputed(jobId);
+        _record(job.tokenId, OUTCOME_DISPUTED, 0);
+    }
+
+    /// @notice Anyone can pay the provider once the evaluator stayed silent for the whole window.
+    function claimTimeout(uint256 jobId) external nonReentrant {
+        Job storage job = _jobInState(jobId, State.Submitted);
+        if (block.timestamp < uint256(job.submittedAt) + job.acceptWindow) revert TooEarly();
+        job.state = State.TimedOut;
+        (uint256 payout, uint256 fee) = _split(job.amount);
+        emit JobTimedOut(jobId, payout, fee);
+        _payProvider(job.payee, payout, fee);
+        _record(job.tokenId, OUTCOME_COMPLETED, job.amount);
+    }
+
     function createJob(
         uint256 tokenId,
         bytes32 taskHash,

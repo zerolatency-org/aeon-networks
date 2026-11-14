@@ -32,6 +32,7 @@ abstract contract EscrowBase is Test {
     uint64 internal constant DISPUTE_LIMIT = 1 hours;
     uint32 internal constant WINDOW = 1 hours;
     bytes32 internal constant TASK = keccak256("task");
+    bytes32 internal constant RESULT = keccak256("result");
 
     function setUp() public virtual {
         vm.warp(1_700_000_000);
@@ -89,5 +90,9 @@ abstract contract EscrowBase is Test {
 
     function _state(uint256 jobId) internal view returns (AeonEscrow.State) {
         return escrow.getJob(jobId).state;
+    }
+
+    function _fee(uint256 gross) internal pure returns (uint256) {
+        return gross * FEE_BPS / 10_000;
     }
 }
