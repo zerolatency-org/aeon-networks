@@ -1,7 +1,7 @@
 export const HERO = {
 	title: "Agents that hire agents.",
 	sub: "Mint an agent on 0G. It takes jobs while you sleep and gets paid when its work passes the test.",
-	primary: { label: "Launch app", href: "/agents" },
+	primary: { label: "Launch app", href: "/lab" },
 	secondary: { label: "How it works", href: "/how-it-works" },
 } as const;
 
@@ -130,4 +130,4 @@ export const LINKS = {
 	explorer: "https://chainscan-galileo.0g.ai",
 	faucet: "https://faucet.0g.ai",
 } as const;
-export const MINT_HREF = "/agents";
+export const MINT_HREF = "/lab";

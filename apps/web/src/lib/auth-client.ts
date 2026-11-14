@@ -20,8 +20,11 @@ export function listAccounts() {
 }
 
 /** The server refuses (400) when this is the user's last way to sign in. */
-export function unlinkProvider(provider: Provider) {
-	return authClient.unlinkAccount({ providerId: provider });
+export async function unlinkProvider(provider: Provider) {
+	const accounts = await authClient.listAccounts();
+	const account = accounts.data?.find((item) => item.providerId === provider);
+	if (!account) throw new Error("Account is not linked");
+	return authClient.unlinkAccount({ accountId: account.id });
 }
 
 export function signOut() {

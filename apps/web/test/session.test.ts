@@ -5,8 +5,8 @@ import { shouldRetry } from "@/lib/retry";
 import { deriveSession, displayName, type Me } from "@/lib/session";
 
 const user = { id: "u1", name: "Ada", email: "ada@example.com", image: null };
-const A = "0x3eb2c1f5d8a94e6b7c0d1e2f3a4b5c6d7e8fa2aB";
-const B = "0x1111111111111111111111111111111111111111";
+const A = "0x3eb2c1f5d8a94e6b7c0d1e2f3a4b5c6d7e8fa2aB" as `0x${string}`;
+const B = "0x1111111111111111111111111111111111111111" as `0x${string}`;
 const me = (wallets: Me["wallets"]): Me => ({ user, wallets });
 
 describe("deriveSession", () => {
@@ -58,7 +58,7 @@ describe("deriveSession", () => {
 		});
 		expect(s.status).toBe("ready");
 		if (s.status === "ready") {
-			expect(s.wallet.address).toBe(A.toLowerCase());
+			expect(s.wallet.address).toBe(A.toLowerCase() as `0x${string}`);
 			expect(s.wallets).toHaveLength(2);
 		}
 	});

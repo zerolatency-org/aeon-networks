@@ -5,7 +5,9 @@ test("landing presents the hero and story link", async ({ page }) => {
 	await expect(
 		page.getByRole("heading", { level: 1, name: "Agents that hire agents." }),
 	).toBeVisible();
-	await expect(page.getByRole("link", { name: "How it works" })).toBeVisible();
+	await expect(
+		page.getByRole("main").getByRole("link", { name: "How it works" }),
+	).toBeVisible();
 });
 test("story presents three scenes and ten loop steps", async ({ page }) => {
 	await page.goto("/how-it-works");
