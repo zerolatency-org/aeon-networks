@@ -1,0 +1,50 @@
+/* apps/web/src/styles/tokens.css
+   The only file in the app that contains raw colors. Everything else uses
+   the names below through Tailwind (bg-canvas, text-fg, border-border...). */
+
+/* Light: warm paper day. */
+:root,
+.light {
+	--canvas: #f6f5f0;
+	--surface-1: #ffffff;
+	--surface-2: #eeede7;
+	--surface-3: #e4e2da;
+	--border: #e0ded6;
+	--border-strong: #cbc8be;
+	--text: #17181a;
+	--text-2: #55574f;
+	--text-3: #6f716a;
+	--lumen: #d9f27a;
+	--lumen-ink: #14170a;
+	--lumen-fg: #4d6200;
+	--tide: #0b7482;
+	--iris: #5646d0;
+	--ember: #9a5b0e;
+	--coral: #bc3b2a;
+	--moss: #1f7346;
+	--float-shadow: 0 8px 24px rgba(23, 24, 26, 0.08);
+	color-scheme: light;
+}
+
+/* Dark: graphite night. No drop shadows, only surface steps and borders. */
+.dark {
+	--canvas: #0e0f11;
+	--surface-1: #16181b;
+	--surface-2: #1d2024;
+	--surface-3: #25292e;
+	--border: #2c3036;
+	--border-strong: #3a3f46;
+	--text: #edeeea;
+	--text-2: #a6a9a4;
+	--text-3: #7a7d76;
+	--lumen: #d9f27a;
+	--lumen-ink: #14170a;
+	--lumen-fg: #d9f27a;
+	--tide: #67d3e0;
+	--iris: #a79bff;
+	--ember: #f2b25c;
+	--coral: #f2766b;
+	--moss: #6fd49a;
+	--float-shadow: none;
+	color-scheme: dark;
+}
