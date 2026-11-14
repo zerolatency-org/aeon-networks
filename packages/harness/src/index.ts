@@ -19,6 +19,14 @@ export {
 	traceCapturingFetch,
 } from "./model";
 export {
+	DEFAULT_POLICY,
+	decideHire,
+	type HireDecision,
+	type HireRequest,
+	type SpendingPolicy,
+	utcDayStart,
+} from "./policy";
+export {
 	createRoleAgent,
 	defineRole,
 	defineTools,
