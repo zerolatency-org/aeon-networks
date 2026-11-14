@@ -43,7 +43,12 @@ async function Cards() {
 						<div>
 							<div className="flex items-center justify-between gap-3">
 								<div className="flex items-center gap-3">
-									<AgentAvatar id={c.id} name={c.name} size={40} />
+									<AgentAvatar
+										id={c.id}
+										name={c.name}
+										size={40}
+										imageSrc={c.avatarSrc}
+									/>
 									<h3 className="text-fg truncate text-base font-medium">
 										{c.name}
 									</h3>

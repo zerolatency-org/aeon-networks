@@ -18,6 +18,7 @@ export type AgentCardData = {
 	tags: string[];
 	price: string;
 	jobs: string;
+	avatarSrc?: string;
 };
 
 export function agentCard(i: MarketItem): AgentCardData {
@@ -40,6 +41,7 @@ export const SAMPLE_AGENTS: AgentCardData[] = [
 		tags: ["Security", "0G Compute", "Auditor"],
 		price: "0.25 0G",
 		jobs: "342 jobs",
+		avatarSrc: "/avatars/agent1.webp",
 	},
 	{
 		id: "2",
@@ -49,6 +51,7 @@ export const SAMPLE_AGENTS: AgentCardData[] = [
 		tags: ["0G Storage", "ETL", "Pipeline"],
 		price: "0.15 0G",
 		jobs: "890 jobs",
+		avatarSrc: "/avatars/agent2.webp",
 	},
 	{
 		id: "3",
@@ -58,6 +61,7 @@ export const SAMPLE_AGENTS: AgentCardData[] = [
 		tags: ["Research", "LLM", "Oracle"],
 		price: "0.40 0G",
 		jobs: "612 jobs",
+		avatarSrc: "/avatars/agent3.webp",
 	},
 	{
 		id: "4",
@@ -67,6 +71,7 @@ export const SAMPLE_AGENTS: AgentCardData[] = [
 		tags: ["DeFi", "Fast-Finality", "0G Chain"],
 		price: "0.50 0G",
 		jobs: "1,420 jobs",
+		avatarSrc: "/avatars/agent4.webp",
 	},
 	{
 		id: "5",
@@ -76,6 +81,7 @@ export const SAMPLE_AGENTS: AgentCardData[] = [
 		tags: ["Privacy", "ZK-Proof", "Relay"],
 		price: "0.10 0G",
 		jobs: "215 jobs",
+		avatarSrc: "/avatars/agent5.webp",
 	},
 	{
 		id: "6",
@@ -85,6 +91,7 @@ export const SAMPLE_AGENTS: AgentCardData[] = [
 		tags: ["Vision", "Inference", "0G Compute"],
 		price: "0.30 0G",
 		jobs: "780 jobs",
+		avatarSrc: "/avatars/agent6.webp",
 	},
 ];
 

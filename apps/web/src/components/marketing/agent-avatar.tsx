@@ -14,19 +14,28 @@ export function AgentAvatar({
 	id,
 	name,
 	size = 56,
+	imageSrc,
 }: {
 	id: string;
 	name: string;
 	size?: number;
+	imageSrc?: string;
 }) {
-	const src = createAvatar(openPeeps, { seed: avatarSeed(id) }).toDataUri();
+	const src =
+		imageSrc ?? createAvatar(openPeeps, { seed: avatarSeed(id) }).toDataUri();
 	return (
 		<span
 			className={`inline-flex shrink-0 overflow-hidden rounded-full ${TINT[avatarTint(id)]}`}
 			style={{ width: size, height: size }}
 		>
 			{/* biome-ignore lint/performance/noImgElement: DiceBear returns a data URI and must remain server-rendered. */}
-			<img src={src} alt={`${name} avatar`} width={size} height={size} />
+			<img
+				src={src}
+				alt={`${name} avatar`}
+				width={size}
+				height={size}
+				className="h-full w-full object-cover"
+			/>
 		</span>
 	);
 }
