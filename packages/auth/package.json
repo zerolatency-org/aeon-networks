@@ -1,0 +1,24 @@
+{
+	"name": "@aeon/auth",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./*": "./src/*.ts"
+	},
+	"scripts": {
+		"build": "tsc -b",
+		"check-types": "tsc -b"
+	},
+	"dependencies": {
+		"@aeon/db": "workspace:*",
+		"@better-auth/core": "1.7.12",
+		"@better-auth/drizzle-adapter": "1.7.12",
+		"better-auth": "catalog:",
+		"drizzle-orm": "catalog:",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@aeon/config": "workspace:*",
+		"typescript": "catalog:"
+	}
+}

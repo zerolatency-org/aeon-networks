@@ -1,0 +1,25 @@
+{
+	"name": "@aeon/api",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./*": "./src/*.ts"
+	},
+	"scripts": {
+		"build": "tsc -b",
+		"check-types": "tsc -b"
+	},
+	"dependencies": {
+		"@aeon/auth": "workspace:*",
+		"@aeon/db": "workspace:*",
+		"@orpc/client": "^1.15.6",
+		"@orpc/openapi": "catalog:",
+		"@orpc/server": "catalog:",
+		"@orpc/zod": "catalog:",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@aeon/config": "workspace:*",
+		"typescript": "catalog:"
+	}
+}
