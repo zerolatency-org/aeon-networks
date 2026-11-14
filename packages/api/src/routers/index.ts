@@ -10,6 +10,7 @@ import { approvalsRouter } from "./approvals";
 import { autonomyRouter } from "./autonomy";
 import { jobsRouter } from "./jobs";
 import { marketRouter } from "./market";
+import { modelsRouter } from "./models";
 import { vaultRouter } from "./vault";
 
 export const appRouter = {
@@ -68,6 +69,8 @@ export const appRouter = {
 	},
 
 	agents: agentsRouter,
+
+	models: modelsRouter,
 
 	market: marketRouter,
 
