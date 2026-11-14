@@ -35,7 +35,9 @@
 			"!packages/db/src/env.ts",
 			"!packages/contracts",
 			"!**/src/env.ts",
-			"!packages/db/src/migrations"
+			"!packages/db/src/migrations",
+			"!apps/web/test-results",
+			"!apps/web/playwright-report"
 		]
 	},
 	"formatter": {
