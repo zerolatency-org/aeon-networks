@@ -16,6 +16,8 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 
+import { chatHandler } from "./chat";
+
 export type AppDeps = {
 	db: Database;
 	auth: Auth;
@@ -61,6 +63,7 @@ export function createApp({
 	});
 
 	app.on(["POST", "GET"], "/api/auth/*", (c) => auth.handler(c.req.raw));
+	app.post("/api/agents/:id/chat", chatHandler({ db, auth, aeon }));
 
 	const apiHandler = new OpenAPIHandler(appRouter, {
 		plugins: [
