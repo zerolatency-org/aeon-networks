@@ -6,13 +6,17 @@ import { chainFor, loadDeployment } from "@aeon/chain";
 import { createSecretBox } from "@aeon/crypto";
 import { createDb } from "@aeon/db";
 import { DEFAULT_CATALOG } from "@aeon/harness";
-import { createPublicClient, http, type PublicClient } from "viem";
+import { createMemoryStore, createOgStore, withDeadline } from "@aeon/storage";
+import { createPublicClient, type Hex, http, type PublicClient } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
 
 import { ENV } from "./env.server";
 
 export const db = createDb(ENV);
 export const auth = createAuth(ENV, db);
 export const wallets = createWalletLinker(auth, db, ENV);
+/** The Aeon Verifier's key: only the worker signs with it. */
+export const verifierKey = ENV.AEON_VERIFIER_PRIVATE_KEY as Hex | undefined;
 export const aeon = loadAeonServices();
 
 function loadAeonServices(): AeonServices | null {
@@ -40,5 +44,34 @@ function loadAeonServices(): AeonServices | null {
 			maxBytes: ENV.MAILBOX_MAX_BYTES,
 			quotaBytes: ENV.MAILBOX_QUOTA_BYTES,
 		},
+		store: blobStore(),
+		verifier: verifierKey ? verifierOf(verifierKey) : undefined,
 	};
+}
+
+/** The Aeon Verifier's public half, for clients that name it as evaluator. */
+function verifierOf(key: Hex) {
+	const account = privateKeyToAccount(key);
+	return {
+		address: account.address.toLowerCase() as Hex,
+		publicKey: account.publicKey,
+	};
+}
+
+/** 0G Storage when STORAGE_PRIVATE_KEY is set; otherwise memory (local runs only). */
+function blobStore() {
+	if (!ENV.STORAGE_PRIVATE_KEY) {
+		console.warn(
+			"STORAGE_PRIVATE_KEY not set: big results and archives stay in memory",
+		);
+		return createMemoryStore();
+	}
+	return withDeadline(
+		createOgStore({
+			indexerUrl: ENV.OG_INDEXER_URL,
+			rpcUrl: ENV.OG_RPC_URL,
+			privateKey: ENV.STORAGE_PRIVATE_KEY,
+		}),
+		{ put: 120_000, get: 60_000 },
+	);
 }

@@ -1,22 +1,24 @@
 // apps/server/src/worker.ts
-// Background process. Always: the indexer keeps Postgres in step with the chain.
-// With agent services configured (MASTER_KEY, ROUTER_API_KEY, deployment): the provider
-// works hired jobs. With KEEPER_PRIVATE_KEY: the keeper settles jobs nobody acts on.
-// Run: cd apps/server && bun run worker
-import { createMemoryStore, createOgStore, withDeadline } from "@aeon/storage";
+// Background process. The indexer keeps Postgres in step with the chain; the provider
+// works hired jobs; the evaluator verifies, pays and archives; the keeper settles silent
+// jobs; the sweeper empties the mailbox. Run: cd apps/server && bun run worker
 import { privateKeyToAccount } from "viem/accounts";
 
 import { ENV } from "./env.server";
+import { runEvaluatorOnce } from "./evaluator";
 import { runIndexer } from "./indexer/indexer";
 import { runKeeperOnce } from "./keeper";
 import { runProviderOnce } from "./provider";
-import { aeon, db } from "./services";
+import { aeon, db, verifierKey } from "./services";
+import { runSweeperOnce } from "./sweeper";
 
-if (!aeon) {
+if (!aeon?.store) {
 	throw new Error(
 		"the worker needs MASTER_KEY, ROUTER_API_KEY and DEPLOYMENT_FILE (see .env.schema)",
 	);
 }
+const services = aeon;
+const store = aeon.store;
 const { client, deployment } = aeon;
 const rpcChain = await client.getChainId();
 if (rpcChain !== deployment.chainId) {
@@ -28,6 +30,7 @@ if (rpcChain !== deployment.chainId) {
 const stop = new AbortController();
 process.on("SIGINT", () => stop.abort());
 process.on("SIGTERM", () => stop.abort());
+const workerId = `worker-${process.pid}`;
 
 /** Runs `pass` every `intervalMs` until stopped. `pass` returns true while there is more to do. */
 async function loop(
@@ -45,25 +48,6 @@ async function loop(
 	}
 }
 
-function resultStore() {
-	if (!ENV.STORAGE_PRIVATE_KEY) {
-		console.warn(
-			"STORAGE_PRIVATE_KEY not set: results over the mailbox cap stay in memory",
-		);
-		return createMemoryStore();
-	}
-	return withDeadline(
-		createOgStore({
-			indexerUrl: ENV.OG_INDEXER_URL,
-			rpcUrl: ENV.OG_RPC_URL,
-			privateKey: ENV.STORAGE_PRIVATE_KEY,
-		}),
-		{ put: 120_000, get: 60_000 },
-	);
-}
-const store = resultStore();
-const services = aeon;
-
 const loops = [
 	runIndexer({
 		db,
@@ -75,15 +59,28 @@ const loops = [
 		signal: stop.signal,
 	}),
 	loop("provider", 2_000, async () => {
-		const outcome = await runProviderOnce({
+		const out = await runProviderOnce({ db, aeon: services, store, workerId });
+		if (out) console.log(`provider: job ${out.jobId} ${out.status}`);
+		return out !== null;
+	}),
+	loop("evaluator", 2_000, async () => {
+		const out = await runEvaluatorOnce({
 			db,
 			aeon: services,
 			store,
-			workerId: `worker-${process.pid}`,
+			workerId,
+			verifierKey,
 		});
-		if (outcome)
-			console.log(`provider: job ${outcome.jobId} ${outcome.status}`);
-		return outcome !== null;
+		if (out) console.log(`evaluator: job ${out.jobId} ${out.status}`);
+		return out !== null;
+	}),
+	loop("sweeper", 5 * 60_000, async () => {
+		const swept = await runSweeperOnce(db);
+		if (swept.deliveries || swept.approvals)
+			console.log(
+				`sweeper: ${swept.deliveries} deliveries, ${swept.approvals} approvals`,
+			);
+		return false;
 	}),
 ];
 if (ENV.KEEPER_PRIVATE_KEY) {
@@ -101,7 +98,7 @@ if (ENV.KEEPER_PRIVATE_KEY) {
 }
 
 console.log(
-	`worker: chain ${deployment.chainId}, indexer + provider${ENV.KEEPER_PRIVATE_KEY ? " + keeper" : ""}`,
+	`worker: chain ${deployment.chainId}, indexer + provider + evaluator + sweeper${ENV.KEEPER_PRIVATE_KEY ? " + keeper" : ""}${verifierKey ? " (Aeon Verifier on)" : ""}`,
 );
 await Promise.all(loops);
 process.exit(0);
