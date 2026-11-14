@@ -20,6 +20,32 @@ import { aeonProcedure, walletProcedure } from "../index";
 const AGENT_PERMISSIONS = 3n;
 const DRAFT_TTL_MS = 24 * 60 * 60 * 1000;
 
+/** Preset faces shipped with the web app: p01 to p20. */
+const PRESET_IDS = Array.from(
+	{ length: 20 },
+	(_, i) => `p${String(i + 1).padStart(2, "0")}`,
+) as [string, ...string[]];
+/** The soft background tints the web app can draw behind a generated face. */
+const AVATAR_TINTS = [
+	"tide",
+	"iris",
+	"ember",
+	"coral",
+	"moss",
+	"lumen",
+] as const;
+
+const AvatarInput = z.discriminatedUnion("kind", [
+	z.object({ kind: z.literal("preset"), ref: z.enum(PRESET_IDS) }),
+	z.object({
+		kind: z.literal("dicebear"),
+		ref: z.object({
+			seed: z.string().trim().toLowerCase().min(1).max(40),
+			bg: z.enum(AVATAR_TINTS),
+		}),
+	}),
+]);
+
 const fail = (code: string, status: number, message = code) =>
 	new ORPCError(code, { status, message });
 
@@ -313,5 +339,27 @@ export const agentsRouter = {
 				r.wallet,
 				await balanceOf(context.aeon, r.wallet),
 			);
+		}),
+
+	setAvatar: walletProcedure
+		.route({ method: "PUT", path: "/agents/{id}/avatar" })
+		.input(z.object({ id: z.string().uuid(), avatar: AvatarInput }))
+		.handler(async ({ context, input }) => {
+			const [row] = await context.db
+				.update(agents)
+				.set({ avatarKind: input.avatar.kind, avatarRef: input.avatar.ref })
+				.where(
+					and(
+						eq(agents.id, input.id),
+						eq(agents.ownerUserId, context.session.user.id),
+					),
+				)
+				.returning({
+					avatarKind: agents.avatarKind,
+					avatarRef: agents.avatarRef,
+				});
+			// Someone else's agent looks exactly like a missing one.
+			if (!row) throw fail("NOT_FOUND", 404, "No such agent");
+			return row;
 		}),
 };
