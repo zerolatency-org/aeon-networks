@@ -1,5 +1,6 @@
 // apps/server/test/helpers.ts
 // Builds the full app (auth + routes) on a fresh test database.
+import type { AeonServices } from "@aeon/api/context";
 import { createAuth, createWalletLinker } from "@aeon/auth";
 import type { PrivateKeyAccount } from "viem/accounts";
 import { createSiweMessage } from "viem/siwe";
@@ -15,7 +16,7 @@ export const testEnv = {
 	OG_CHAIN_ID: 16602,
 };
 
-export async function setupTestApp() {
+export async function setupTestApp(opts: { aeon?: AeonServices | null } = {}) {
 	const { db, close } = await setupTestDb();
 	const auth = createAuth(testEnv, db);
 	const wallets = createWalletLinker(auth, db, testEnv);
@@ -26,6 +27,7 @@ export async function setupTestApp() {
 		corsOrigin: testEnv.CORS_ORIGIN,
 		version: "test",
 		logRequests: false,
+		aeon: opts.aeon ?? null,
 	});
 	return { db, auth, app, close };
 }

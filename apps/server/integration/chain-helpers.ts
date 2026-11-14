@@ -1,4 +1,4 @@
-import { rmSync } from "node:fs";
+import { readFileSync, rmSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import {
 	aeonAgentNftAbi,
@@ -30,6 +30,40 @@ const DEPLOYER_KEY =
 
 export const account = (i: number) =>
 	mnemonicToAccount(MNEMONIC, { addressIndex: i });
+
+/** The raw private key of anvil account i (for code that wants a PrivateKeyAccount). */
+export const privateKeyOf = (i: number): Hex =>
+	toHex(account(i).getHdKey().privateKey ?? new Uint8Array());
+
+/** Wallet client for anvil account i on the given node. */
+export const walletFor = (rpcUrl: string, i: number) =>
+	createWalletClient({
+		account: account(i),
+		chain: foundry,
+		transport: http(rpcUrl),
+	});
+
+/** Deploys a second, unrelated AeonAgentNFT (same bytecode, different address). */
+export async function deployForeignNft(chain: {
+	rpcUrl: string;
+	client: PublicClient;
+}) {
+	const artifact = JSON.parse(
+		readFileSync(
+			`${CONTRACTS_DIR}/out/AeonAgentNFT.sol/AeonAgentNFT.json`,
+			"utf8",
+		),
+	) as { bytecode: { object: Hex } };
+	const w = walletFor(chain.rpcUrl, 9);
+	const hash = await w.deployContract({
+		abi: aeonAgentNftAbi,
+		bytecode: artifact.bytecode.object,
+		args: [w.account.address, w.account.address, w.account.address, 0n],
+	});
+	const receipt = await chain.client.waitForTransactionReceipt({ hash });
+	if (!receipt.contractAddress) throw new Error("foreign deploy failed");
+	return receipt.contractAddress;
+}
 
 export async function startChain() {
 	const port = 20_000 + Math.floor(Math.random() * 20_000);
