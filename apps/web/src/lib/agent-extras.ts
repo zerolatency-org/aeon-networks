@@ -2,12 +2,31 @@
 import type { AgentExtras } from "./agent-overview";
 
 export const extrasKeys = {
-	one: (id: string) => ["agents", "extras", id] as const,
+	one: (id: string, tokenId?: string) =>
+		["agents", "extras", id, tokenId] as const,
 };
 
-/** No web route for job numbers yet, so this answers null and the Overview says so. */
 export async function getAgentExtras(
-	_agentId: string,
+	agentId: string,
+	tokenId?: string,
 ): Promise<AgentExtras | null> {
-	return null;
+	if (!tokenId) return null;
+	try {
+		const res = await fetch(`/api/market/agents/${tokenId}`, {
+			credentials: "include",
+		});
+		if (!res.ok) return null;
+		const data = (await res.json()) as {
+			totalSettled?: string;
+			jobsCompleted?: number;
+		};
+		return {
+			earningsWei:
+				typeof data.totalSettled === "string" ? data.totalSettled : null,
+			jobsCompleted:
+				typeof data.jobsCompleted === "number" ? data.jobsCompleted : null,
+		};
+	} catch {
+		return null;
+	}
 }

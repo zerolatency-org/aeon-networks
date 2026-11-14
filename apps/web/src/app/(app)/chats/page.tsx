@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { AgentFace } from "@/components/agents/agent-face";
-import { card, primary, quiet } from "@/components/agents/styles";
+import { card, primary } from "@/components/agents/styles";
 import { agentKeys, listAgents } from "@/lib/agents-api";
 import { avatarTint } from "@/lib/avatar";
 import { type ChatThread, deleteThread, loadThreads } from "@/lib/chat-storage";

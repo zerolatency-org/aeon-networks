@@ -7,7 +7,7 @@ import { useState } from "react";
 
 import { card, primary, quiet } from "@/components/agents/styles";
 import { JobCard } from "@/components/jobs/job-card";
-import { fetchJobsList, type JobState, type JobView } from "@/lib/jobs-api";
+import { fetchJobsList, type JobView } from "@/lib/jobs-api";
 
 type FilterTab = "all" | "active" | "completed" | "disputed";
 
