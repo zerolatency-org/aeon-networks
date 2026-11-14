@@ -1,0 +1,22 @@
+{
+	"name": "@aeon/crypto",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./*": "./src/*.ts"
+	},
+	"scripts": {
+		"build": "tsc -b",
+		"check-types": "tsc -b",
+		"test": "bun test"
+	},
+	"dependencies": {
+		"eciesjs": "0.5.0",
+		"viem": "2.57.16"
+	},
+	"devDependencies": {
+		"@aeon/config": "workspace:*",
+		"@types/bun": "catalog:",
+		"typescript": "catalog:"
+	}
+}

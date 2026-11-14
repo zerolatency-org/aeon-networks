@@ -32,7 +32,10 @@
 			"!packages/contracts/cache",
 			"!packages/contracts/deployments",
 			"!apps/server/src/env.ts",
-			"!packages/db/src/env.ts"
+			"!packages/db/src/env.ts",
+			"!packages/contracts",
+			"!**/src/env.ts",
+			"!packages/db/src/migrations"
 		]
 	},
 	"formatter": {
