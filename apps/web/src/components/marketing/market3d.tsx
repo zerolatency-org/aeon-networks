@@ -4,7 +4,7 @@ import { useTheme } from "next-themes";
 import { useMemo, useRef } from "react";
 import type { Group, Mesh } from "three";
 import * as THREE from "three";
-import { buildGraph, pathPosition } from "@/lib/market-graph";
+import { buildGraph, type Graph, pathPosition } from "@/lib/market-graph";
 import { pulseRoute } from "@/lib/poster";
 
 type ThemeColors = {
@@ -18,7 +18,7 @@ type ThemeColors = {
 };
 
 function Network({ colors }: { colors: ThemeColors }) {
-	const graph = useMemo(() => buildGraph(), []);
+	const graph: Graph = useMemo(() => buildGraph(), []);
 	const route = useMemo(() => pulseRoute(graph), [graph]);
 	const group = useRef<Group>(null);
 	const pulse = useRef<Mesh>(null);
@@ -41,7 +41,7 @@ function Network({ colors }: { colors: ThemeColors }) {
 	// Triangle face geometry — one mesh per highlighted face
 	const faceGeometries = useMemo(
 		() =>
-			graph.faces.map(([a, b, c]) => {
+			(graph.faces ?? []).map(([a, b, c]) => {
 				const na = graph.nodes[a];
 				const nb = graph.nodes[b];
 				const nc = graph.nodes[c];
