@@ -18,11 +18,19 @@ export function defineCatalog(models: ModelInfo[]): Catalog {
 }
 
 /** Testnet default. Check pc.testnet.0g.ai for the current model list and prices. */
+/** Testnet default. Check pc.testnet.0g.ai for the current model list and prices. */
 export const DEFAULT_CATALOG = defineCatalog([
 	{ id: "glm-5.2", label: "GLM 5.2", toolCalling: true },
+	{
+		id: "qwen3-omni-flash",
+		label: "Qwen3 Omni Flash",
+		toolCalling: true,
+		inputPrice: 1170000000000n,
+		outputPrice: 4710000000000n,
+	},
 ]);
 
-export const DEFAULT_MODEL = "glm-5.2";
+export const DEFAULT_MODEL = "qwen3-omni-flash";
 
 export class UnknownModelError extends Error {
 	constructor(readonly model: string) {
