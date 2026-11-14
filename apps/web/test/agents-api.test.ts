@@ -8,6 +8,7 @@ import {
 	getPolicy,
 	listAgents,
 	prepareAgent,
+	setAvatar,
 	setPolicy,
 } from "@/lib/agents-api";
 import { ApiError } from "@/lib/siwe-api";
@@ -113,5 +114,39 @@ describe("policy calls", () => {
 		await setPolicy("x", pol, f.fetchImpl);
 		expect(f.seen[1]?.init?.method).toBe("PUT");
 		expect(JSON.parse(String(f.seen[1]?.init?.body))).toEqual(pol);
+	});
+});
+
+describe("avatar save", () => {
+	test("setAvatar PUTs the choice and returns what the server stored", async () => {
+		const f = fake(200, { avatarKind: "preset", avatarRef: "p04" });
+		const saved = await setAvatar(
+			"a/1",
+			{ kind: "preset", id: "p04" },
+			f.fetchImpl,
+		);
+		expect(saved).toEqual({ kind: "preset", id: "p04" });
+		expect(f.seen[0]?.path).toBe("/api/agents/a%2F1/avatar");
+		expect(f.seen[0]?.init?.method).toBe("PUT");
+		expect(JSON.parse(String(f.seen[0]?.init?.body))).toEqual({
+			avatar: { kind: "preset", ref: "p04" },
+		});
+	});
+
+	test("an answer that is not a face is BAD_RESPONSE, and a refusal keeps its code", async () => {
+		const odd = fake(200, { avatarKind: "upload", avatarRef: "m1" });
+		const e1 = await setAvatar(
+			"a",
+			{ kind: "preset", id: "p01" },
+			odd.fetchImpl,
+		).catch((e) => e);
+		expect(e1).toMatchObject({ code: "BAD_RESPONSE" });
+		const no = fake(404, { code: "NOT_FOUND" });
+		const e2 = await setAvatar(
+			"a",
+			{ kind: "preset", id: "p01" },
+			no.fetchImpl,
+		).catch((e) => e);
+		expect(e2).toMatchObject({ code: "NOT_FOUND", status: 404 });
 	});
 });
