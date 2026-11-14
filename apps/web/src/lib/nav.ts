@@ -5,7 +5,12 @@ import type { SessionState } from "./session";
 type Status = SessionState["status"];
 
 /** Pages in the navbar. Later phases append here: Jobs, Chats, and so on. */
-export const NAV_ITEMS = [{ href: "/agents", label: "Agents" }] as const;
+export const NAV_ITEMS = [
+	{ href: "/market", label: "Market" },
+	{ href: "/agents", label: "Agents" },
+	{ href: "/jobs", label: "Jobs" },
+	{ href: "/chats", label: "Chats" },
+] as const;
 
 /** The nav pill follows the section, so /agents/12 still lights up Agents. */
 export function isActive(pathname: string, href: string): boolean {

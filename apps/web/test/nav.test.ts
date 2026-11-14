@@ -62,7 +62,10 @@ describe("commandItems", () => {
 	test("a ready user gets every page and can sign out; ids never repeat", () => {
 		expect(ids("ready")).toEqual([
 			"home",
+			"market",
 			"agents",
+			"jobs",
+			"chats",
 			"settings",
 			"sign-out",
 			"theme",

@@ -52,31 +52,32 @@ export function Navbar() {
 					aria-label="Main"
 					className="ml-6 hidden items-center gap-1 md:flex"
 				>
-					{session.status === "ready"
-						? NAV_ITEMS.map((item) => {
-								const active = isActive(pathname, item.href);
-								return (
-									<Link
-										key={item.href}
-										href={item.href}
-										aria-current={active ? "page" : undefined}
-										className={cn(
-											"relative rounded-md px-3 py-1.5 text-[15px] transition-colors duration-(--dur-fast)",
-											active ? "text-fg" : "text-fg-2 hover:text-fg",
-										)}
-									>
-										{active ? (
-											<motion.span
-												layoutId="nav-pill"
-												transition={SPRING}
-												className="bg-surface-2 absolute inset-0 rounded-md"
-											/>
-										) : null}
-										<span className="relative">{item.label}</span>
-									</Link>
-								);
-							})
-						: null}
+					{(session.status === "ready"
+						? NAV_ITEMS
+						: NAV_ITEMS.filter((item) => item.href === "/market")
+					).map((item) => {
+						const active = isActive(pathname, item.href);
+						return (
+							<Link
+								key={item.href}
+								href={item.href}
+								aria-current={active ? "page" : undefined}
+								className={cn(
+									"relative rounded-md px-3 py-1.5 text-[15px] transition-colors duration-(--dur-fast)",
+									active ? "text-fg" : "text-fg-2 hover:text-fg",
+								)}
+							>
+								{active ? (
+									<motion.span
+										layoutId="nav-pill"
+										transition={SPRING}
+										className="bg-surface-2 absolute inset-0 rounded-md"
+									/>
+								) : null}
+								<span className="relative">{item.label}</span>
+							</Link>
+						);
+					})}
 				</nav>
 
 				<div className="ml-auto flex items-center gap-1">
