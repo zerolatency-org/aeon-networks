@@ -14,7 +14,7 @@ export const buttonVariants = cva(
 				default: "bg-surface-2 text-fg hover:bg-surface-3",
 				outline: "border-border-strong text-fg hover:bg-surface-2 border",
 				ghost: "text-fg-2 hover:bg-surface-2 hover:text-fg",
-				danger: "bg-coral/12 text-coral hover:bg-coral/20",
+				danger: "bg-coral/8 text-coral hover:bg-coral/15",
 			},
 			size: {
 				sm: "h-8 px-3 text-[13px]",

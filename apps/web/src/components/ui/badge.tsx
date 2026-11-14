@@ -10,11 +10,11 @@ export const badgeVariants = cva(
 		variants: {
 			tone: {
 				neutral: "bg-surface-2 text-fg-2",
-				storage: "bg-tide/12 text-tide",
-				agent: "bg-iris/12 text-iris",
-				waiting: "bg-ember/12 text-ember",
-				danger: "bg-coral/12 text-coral",
-				done: "bg-moss/12 text-moss",
+				storage: "bg-tide/8 text-tide",
+				agent: "bg-iris/8 text-iris",
+				waiting: "bg-ember/8 text-ember",
+				danger: "bg-coral/8 text-coral",
+				done: "bg-moss/8 text-moss",
 				live: "bg-lumen text-lumen-ink",
 			},
 		},
