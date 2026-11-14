@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { Instrument_Sans, JetBrains_Mono, Newsreader } from "next/font/google";
 import type { ReactNode } from "react";
+import { Navbar } from "@/components/nav/navbar";
 import { AppProviders } from "@/components/providers/app-providers";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import "@/styles/globals.css";
@@ -36,7 +37,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 		>
 			<body>
 				<ThemeProvider>
-					<AppProviders>{children}</AppProviders>
+					<AppProviders>
+						<Navbar />
+						{children}
+					</AppProviders>
 				</ThemeProvider>
 			</body>
 		</html>
