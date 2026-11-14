@@ -1,5 +1,5 @@
 // apps/web/src/lib/jobs-api.ts
-import type { Hex, TxRequest } from "./agents-parse";
+import type { TxRequest } from "./agents-parse";
 import { ApiError } from "./siwe-api";
 
 export const JOB_STATUSES = [

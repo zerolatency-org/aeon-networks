@@ -16,7 +16,6 @@ import {
 	prepareJobAction,
 	triggerEvaluate,
 } from "@/lib/jobs-api";
-import { ApiError } from "@/lib/siwe-api";
 
 const mockJob: JobView = {
 	jobId: "101",

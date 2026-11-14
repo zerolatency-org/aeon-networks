@@ -155,7 +155,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
 				</p>
 
 				<div className="mt-6 space-y-6">
-					{rows.map((row, idx) => (
+					{rows.map((row) => (
 						<div key={row.step} className="flex items-start gap-4">
 							<div
 								className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-mono text-xs font-bold ${
