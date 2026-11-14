@@ -8,3 +8,10 @@ pre-commit:
       glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
       run: bun biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
       stage_fixed: true
+
+commit-msg:
+  jobs:
+    - name: conventional-commit
+      run: |
+        head -1 {1} | grep -Eq '^(feat|fix|test|refactor|docs|chore|ci)(\([a-z0-9-]+\))?: .{1,60}$' \
+          || { echo "Subject must look like 'feat(scope): what changed' with at most 60 characters after the colon."; exit 1; }
