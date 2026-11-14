@@ -2,7 +2,7 @@
 import { describe, expect, test } from "bun:test";
 import { render } from "@testing-library/react";
 
-import type { Logo } from "@/components/brand/logo";
+import { Logo } from "@/components/brand/logo";
 
 describe("Logo", () => {
 	test("is an image named Aeon, 28 px by default", () => {
