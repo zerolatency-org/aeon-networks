@@ -27,5 +27,12 @@ export {
 	type ToolRegistry,
 } from "./registry";
 export { chatRole } from "./roles/chat";
+export {
+	EVALUATOR_INSTRUCTIONS,
+	evaluatorPrompt,
+	judge,
+} from "./roles/evaluator";
 export { providerRole, quoteTask } from "./roles/provider";
+export { ProviderResult, Verdict } from "./schemas";
+export { checkResult, parseTaskSpec, TaskSpec } from "./task";
 export { walletBalanceTool } from "./tools/wallet";
