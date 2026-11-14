@@ -1,0 +1,8 @@
+{
+  "chainId": 16602,
+  "deployer": "0x9CBCf41Ba427e7a1F5dDf9bD9c4e0d0494171597",
+  "escrow": "0xE05C2a9a909026b5f6D1316A10c3446383Cdc258",
+  "nft": "0xec77f94D96869e6f0D21ef375b2654b24D029B4B",
+  "registry": "0x64C95a573bdF90EC4BB9B87C924Ef5ae49aa34f3",
+  "startBlock": 65567307
+}
