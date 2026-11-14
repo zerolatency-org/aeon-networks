@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import { Instrument_Sans, JetBrains_Mono, Newsreader } from "next/font/google";
 import type { ReactNode } from "react";
-
+import { AppProviders } from "@/components/providers/app-providers";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import "@/styles/globals.css";
 
@@ -35,7 +35,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 			className={`${serif.variable} ${sans.variable} ${mono.variable}`}
 		>
 			<body>
-				<ThemeProvider>{children}</ThemeProvider>
+				<ThemeProvider>
+					<AppProviders>{children}</AppProviders>
+				</ThemeProvider>
 			</body>
 		</html>
 	);
