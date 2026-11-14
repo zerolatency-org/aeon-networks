@@ -44,8 +44,7 @@ export function parseStreamLine(line: string): StreamEvent | null {
 	const trimmed = line.trim();
 	if (!trimmed) return null;
 
-	// AI SDK UI message stream protocol:
-	// 0:"text"
+	// Legacy AI SDK Data Stream protocol: 0:"text"
 	if (trimmed.startsWith('0:"') && trimmed.endsWith('"')) {
 		try {
 			const text = JSON.parse(trimmed.slice(2));
@@ -122,14 +121,78 @@ export function parseStreamLine(line: string): StreamEvent | null {
 		}
 	}
 
-	// Standard SSE: data: {"text": "..."}
+	// Standard SSE & AI SDK 7 UI message stream (`toUIMessageStreamResponse`)
 	if (trimmed.startsWith("data:")) {
 		const payload = trimmed.slice(5).trim();
 		if (!payload || payload === "[DONE]") return null;
 		try {
-			const data = JSON.parse(payload);
+			const data = JSON.parse(payload) as Record<string, unknown>;
+
+			// AI SDK 7 text-delta: {"type":"text-delta","delta":"Hello"}
+			if (data.type === "text-delta" && typeof data.delta === "string") {
+				return { type: "text", text: data.delta };
+			}
+			// Fallback plain text: {"text":"Hello"} or {"delta":"Hello"}
 			if (typeof data.text === "string") {
 				return { type: "text", text: data.text };
+			}
+			if (typeof data.delta === "string" && data.type !== "reasoning-delta") {
+				return { type: "text", text: data.delta };
+			}
+
+			// AI SDK 7 tool call: {"type":"tool-input-available","toolCallId":...,"toolName":...,"input":...}
+			if (
+				(data.type === "tool-input-available" || data.type === "tool-call") &&
+				typeof data.toolCallId === "string" &&
+				typeof data.toolName === "string"
+			) {
+				return {
+					type: "tool_call",
+					toolCallId: data.toolCallId,
+					toolName: data.toolName,
+					args: data.input ?? data.args ?? {},
+				};
+			}
+
+			// AI SDK 7 tool result: {"type":"tool-output-available","toolCallId":...,"output":...}
+			if (
+				(data.type === "tool-output-available" ||
+					data.type === "tool-result") &&
+				typeof data.toolCallId === "string"
+			) {
+				return {
+					type: "tool_result",
+					toolCallId: data.toolCallId,
+					result: data.output ?? data.result,
+				};
+			}
+
+			// AI SDK 7 error: {"type":"error","errorText":...}
+			if (data.type === "error") {
+				return {
+					type: "error",
+					error: String(
+						data.errorText ?? data.error ?? data.message ?? "Chat error",
+					),
+				};
+			}
+
+			// AI SDK 7 finish: {"type":"finish",...}
+			if (data.type === "finish") {
+				const usage = (data.usage ?? data.messageMetadata) as
+					| Record<string, unknown>
+					| undefined;
+				const p = Number(usage?.promptTokens ?? usage?.inputTokens ?? 0);
+				const c = Number(usage?.completionTokens ?? usage?.outputTokens ?? 0);
+				return {
+					type: "finish",
+					finishReason: String(data.finishReason ?? "stop"),
+					usage: {
+						promptTokens: p,
+						completionTokens: c,
+						totalTokens: p + c,
+					},
+				};
 			}
 		} catch {
 			return null;
