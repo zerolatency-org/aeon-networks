@@ -34,7 +34,9 @@ describe("Page Metadata & OpenGraph", () => {
 			image: "/custom-preview.png",
 		});
 		expect(meta.twitter).toBeDefined();
-		expect(meta.twitter?.card).toBe("summary_large_image");
+		expect((meta.twitter as Record<string, unknown>)?.card).toBe(
+			"summary_large_image",
+		);
 		expect(meta.twitter?.title).toBe("Jobs");
 		expect(meta.twitter?.images).toEqual(["/custom-preview.png"]);
 	});
