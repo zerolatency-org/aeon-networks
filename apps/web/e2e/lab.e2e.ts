@@ -1,6 +1,7 @@
 // apps/web/e2e/lab.e2e.ts
 import AxeBuilder from "@axe-core/playwright";
 import { expect, type Page, test } from "@playwright/test";
+import { isolate } from "./support";
 
 const SECTIONS = [
 	"Color",
@@ -100,6 +101,27 @@ test("loads with no console errors", async ({ page }) => {
 		// The favicon arrives in F8; its 404 is not a bug in F0.
 		if (m.type() === "error" && !m.location().url.includes("favicon"))
 			problems.push(m.text());
+	});
+	page.on("pageerror", (e) => problems.push(e.message));
+
+	await page.goto("/lab");
+	await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+	expect(problems).toEqual([]);
+});
+
+test("loads with no console errors", async ({ page }) => {
+	await isolate(page);
+	const problems: string[] = [];
+	page.on("console", (m) => {
+		const url = m.location().url;
+		// The favicon arrives in F8. Blocked wallet hosts are expected: isolate() refuses them on purpose.
+		if (
+			m.type() === "error" &&
+			!url.includes("favicon") &&
+			!/walletconnect|reown/i.test(url)
+		) {
+			problems.push(m.text());
+		}
 	});
 	page.on("pageerror", (e) => problems.push(e.message));
 

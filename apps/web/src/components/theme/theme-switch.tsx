@@ -2,10 +2,9 @@
 "use client";
 
 import { Moon, Sun } from "@phosphor-icons/react";
-import { useTheme } from "next-themes";
 
-import { type ThemeName, whaleReveal } from "@/lib/theme-transition";
 import { cn } from "@/lib/utils";
+import { useThemeToggle } from "./use-theme-toggle";
 
 export function ThemeSwitch({
 	slow = 1,
@@ -14,26 +13,7 @@ export function ThemeSwitch({
 	slow?: number;
 	className?: string;
 }) {
-	const { resolvedTheme, setTheme } = useTheme();
-
-	function toggle() {
-		const next: ThemeName = resolvedTheme === "dark" ? "light" : "dark";
-		const root = document.documentElement;
-		void whaleReveal({
-			viewport: { width: window.innerWidth, height: window.innerHeight },
-			reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)")
-				.matches,
-			slow,
-			startViewTransition: document.startViewTransition?.bind(document),
-			animate: (keyframes, options) => root.animate(keyframes, options),
-			apply: () => {
-				root.classList.toggle("dark", next === "dark");
-				root.classList.toggle("light", next === "light");
-				root.style.colorScheme = next;
-				setTheme(next);
-			},
-		});
-	}
+	const toggle = useThemeToggle(slow);
 
 	return (
 		<button

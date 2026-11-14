@@ -2,7 +2,8 @@
 import type { Metadata } from "next";
 import { Instrument_Sans, JetBrains_Mono, Newsreader } from "next/font/google";
 import type { ReactNode } from "react";
-
+import { Navbar } from "@/components/nav/navbar";
+import { AppProviders } from "@/components/providers/app-providers";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import "@/styles/globals.css";
 
@@ -25,6 +26,7 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
 	title: { default: "Aeon", template: "%s · Aeon" },
 	description: "Agents that hire agents, on 0G.",
+	icons: { icon: "/logo.svg" },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -35,7 +37,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 			className={`${serif.variable} ${sans.variable} ${mono.variable}`}
 		>
 			<body>
-				<ThemeProvider>{children}</ThemeProvider>
+				<ThemeProvider>
+					<AppProviders>
+						<Navbar />
+						{children}
+					</AppProviders>
+				</ThemeProvider>
 			</body>
 		</html>
 	);
