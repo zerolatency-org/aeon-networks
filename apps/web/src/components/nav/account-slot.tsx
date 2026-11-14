@@ -17,7 +17,7 @@ export function AccountSlot() {
 		case "signed-out":
 			return (
 				<Button asChild variant="lumen">
-					<Link href="/login">Sign in</Link>
+					<Link href="/login">Launch app</Link>
 				</Button>
 			);
 		case "needs-wallet":

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo, Wordmark } from "@/components/brand/logo";
+import { AccountSlot } from "@/components/nav/account-slot";
 import { ThemeSwitch } from "@/components/theme/theme-switch";
 import { LINKS } from "@/content/marketing";
 
@@ -21,6 +22,12 @@ export function MarketingNav() {
 				<div className="text-fg-2 flex items-center gap-4 text-sm">
 					<Link
 						className="hover:text-fg hidden transition-colors sm:inline"
+						href="/market"
+					>
+						Market
+					</Link>
+					<Link
+						className="hover:text-fg hidden transition-colors sm:inline"
 						href="/how-it-works"
 					>
 						How it works
@@ -40,12 +47,7 @@ export function MarketingNav() {
 						GitHub
 					</a>
 					<ThemeSwitch />
-					<Link
-						href="/login"
-						className="bg-lumen text-lumen-ink inline-flex h-9 items-center rounded-lg px-4 font-medium transition-opacity hover:opacity-90"
-					>
-						Launch app
-					</Link>
+					<AccountSlot />
 				</div>
 			</nav>
 		</header>

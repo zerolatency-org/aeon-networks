@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { Logo, Wordmark } from "@/components/brand/logo";
 import { ThemeSwitch } from "@/components/theme/theme-switch";
 import { Button } from "@/components/ui/button";
+import { LINKS } from "@/content/marketing";
 import { SPRING } from "@/lib/motion";
 import { isActive, isCommandShortcut, NAV_ITEMS, showNavbar } from "@/lib/nav";
 import { useSession } from "@/lib/use-session";
@@ -36,74 +37,112 @@ export function Navbar() {
 
 	if (!showNavbar(pathname)) return null;
 
+	const items =
+		session.status === "ready"
+			? NAV_ITEMS
+			: NAV_ITEMS.filter((item) => item.href === "/market");
+
 	return (
 		<>
-			<header className="glass sticky top-0 z-30 flex h-14 items-center gap-2 px-4 md:px-6">
-				<Link
-					href="/"
-					aria-label="Aeon home"
-					className="flex items-center gap-4"
-				>
-					<Logo />
-					<Wordmark />
-				</Link>
-
+			<header className="border-border bg-canvas/90 sticky top-0 z-30 border-b backdrop-blur-md">
 				<nav
-					aria-label="Main"
-					className="ml-6 hidden items-center gap-1 md:flex"
+					aria-label="Main navigation"
+					className="mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-6 px-6"
 				>
-					{(session.status === "ready"
-						? NAV_ITEMS
-						: NAV_ITEMS.filter((item) => item.href === "/market")
-					).map((item) => {
-						const active = isActive(pathname, item.href);
-						return (
+					<div className="flex items-center gap-6">
+						<Link
+							href="/"
+							aria-label="Aeon home"
+							className="text-fg flex items-center gap-3"
+						>
+							<Logo />
+							<Wordmark />
+						</Link>
+
+						<div className="hidden items-center gap-1 md:flex">
+							{items.map((item) => {
+								const active = isActive(pathname, item.href);
+								return (
+									<Link
+										key={item.href}
+										href={item.href}
+										aria-current={active ? "page" : undefined}
+										className={cn(
+											"relative rounded-md px-3 py-1.5 text-sm transition-colors duration-(--dur-fast)",
+											active
+												? "text-fg font-medium"
+												: "text-fg-2 hover:text-fg",
+										)}
+									>
+										{active ? (
+											<motion.span
+												layoutId="nav-pill"
+												transition={SPRING}
+												className="bg-surface-2 absolute inset-0 rounded-md"
+											/>
+										) : null}
+										<span className="relative">{item.label}</span>
+									</Link>
+								);
+							})}
 							<Link
-								key={item.href}
-								href={item.href}
-								aria-current={active ? "page" : undefined}
+								href="/how-it-works"
 								className={cn(
-									"relative rounded-md px-3 py-1.5 text-[15px] transition-colors duration-(--dur-fast)",
-									active ? "text-fg" : "text-fg-2 hover:text-fg",
+									"hover:text-fg hidden px-3 py-1.5 text-sm transition-colors sm:inline",
+									isActive(pathname, "/how-it-works")
+										? "text-fg font-medium"
+										: "text-fg-2",
 								)}
 							>
-								{active ? (
-									<motion.span
-										layoutId="nav-pill"
-										transition={SPRING}
-										className="bg-surface-2 absolute inset-0 rounded-md"
-									/>
-								) : null}
-								<span className="relative">{item.label}</span>
+								How it works
 							</Link>
-						);
-					})}
-				</nav>
-
-				<div className="ml-auto flex items-center gap-1">
-					<Button
-						variant="ghost"
-						size="sm"
-						aria-label="Open command palette"
-						onClick={() => setPaletteOpen(true)}
-					>
-						<MagnifyingGlass aria-hidden size={18} />
-						<kbd className="num text-fg-3 hidden text-[11px] lg:inline">⌘K</kbd>
-					</Button>
-					<ThemeSwitch />
-					<div className="ml-2">
-						<AccountSlot />
+							<Link
+								href="/lab"
+								className={cn(
+									"hover:text-fg hidden px-3 py-1.5 text-sm transition-colors sm:inline",
+									isActive(pathname, "/lab")
+										? "text-fg font-medium"
+										: "text-fg-2",
+								)}
+							>
+								Lab
+							</Link>
+						</div>
 					</div>
-					<Button
-						variant="ghost"
-						size="sm"
-						className="md:hidden"
-						aria-label="Open menu"
-						onClick={() => setMenuOpen(true)}
-					>
-						<List aria-hidden size={20} />
-					</Button>
-				</div>
+
+					<div className="flex items-center gap-3">
+						<a
+							className="text-fg-2 hover:text-fg hidden text-sm transition-colors md:inline"
+							href={LINKS.github}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							GitHub
+						</a>
+						<Button
+							variant="ghost"
+							size="sm"
+							aria-label="Open command palette"
+							onClick={() => setPaletteOpen(true)}
+						>
+							<MagnifyingGlass aria-hidden size={18} />
+							<kbd className="num text-fg-3 hidden text-[11px] lg:inline">
+								⌘K
+							</kbd>
+						</Button>
+						<ThemeSwitch />
+						<AccountSlot />
+						<Button
+							variant="ghost"
+							size="sm"
+							className="md:hidden"
+							aria-label="Open menu"
+							onClick={() => setMenuOpen(true)}
+						>
+							<List aria-hidden size={20} />
+						</Button>
+					</div>
+				</nav>
 			</header>
 
 			<CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />

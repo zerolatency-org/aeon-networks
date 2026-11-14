@@ -2,6 +2,7 @@
 "use client";
 
 import { MotionConfig, motion } from "motion/react";
+import Link from "next/link";
 import { type ReactNode, useState } from "react";
 
 import { Logo, Wordmark } from "@/components/brand/logo";
@@ -76,30 +77,49 @@ export function LabClient() {
 
 	return (
 		<MotionConfig reducedMotion="user">
-			<header className="glass sticky top-0 z-10 flex h-14 items-center gap-4 px-6">
-				<div className="flex items-center gap-4">
-					<Logo />
-					<Wordmark />
-				</div>
-				<div className="ml-auto flex items-center gap-3">
-					<fieldset
-						aria-label="Whale speed"
-						className="m-0 flex items-center gap-1 border-0 p-0"
-					>
-						<span className="text-fg-2 mr-1 text-[13px]">Whale speed</span>
-						{SLOW.map((n) => (
-							<Button
-								key={n}
-								size="sm"
-								variant={slow === n ? "outline" : "ghost"}
-								aria-pressed={slow === n}
-								onClick={() => setSlow(n)}
+			<header className="border-border bg-canvas/90 sticky top-0 z-30 border-b backdrop-blur-md">
+				<div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-6 px-6">
+					<div className="flex items-center gap-6">
+						<Link
+							href="/"
+							aria-label="Aeon home"
+							className="text-fg flex items-center gap-3"
+						>
+							<Logo />
+							<Wordmark />
+						</Link>
+						<nav className="text-fg-2 hidden items-center gap-4 text-sm sm:flex">
+							<Link className="hover:text-fg transition-colors" href="/market">
+								Market
+							</Link>
+							<Link
+								className="hover:text-fg transition-colors"
+								href="/how-it-works"
 							>
-								{n}x
-							</Button>
-						))}
-					</fieldset>
-					<ThemeSwitch slow={slow} />
+								How it works
+							</Link>
+						</nav>
+					</div>
+					<div className="flex items-center gap-3">
+						<fieldset
+							aria-label="Whale speed"
+							className="m-0 flex items-center gap-1 border-0 p-0"
+						>
+							<span className="text-fg-2 mr-1 text-[13px]">Whale speed</span>
+							{SLOW.map((n) => (
+								<Button
+									key={n}
+									size="sm"
+									variant={slow === n ? "outline" : "ghost"}
+									aria-pressed={slow === n}
+									onClick={() => setSlow(n)}
+								>
+									{n}x
+								</Button>
+							))}
+						</fieldset>
+						<ThemeSwitch slow={slow} />
+					</div>
 				</div>
 			</header>
 
