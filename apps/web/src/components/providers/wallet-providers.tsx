@@ -9,7 +9,7 @@ import {
 	type Theme,
 } from "@rainbow-me/rainbowkit";
 import { useTheme } from "next-themes";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { WagmiProvider } from "wagmi";
 
 import { wagmiConfig } from "@/lib/wagmi";
@@ -34,11 +34,17 @@ const LIGHT = aeonTheme("light");
 /** wagmi and RainbowKit. Needs QueryProvider above it, which wagmi uses for its reads. */
 export function WalletProviders({ children }: { children: ReactNode }) {
 	const { resolvedTheme } = useTheme();
+	const [mounted, setMounted] = useState(false);
+
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
 	return (
 		<WagmiProvider config={wagmiConfig}>
 			<RainbowKitProvider
 				modalSize="compact"
-				theme={resolvedTheme === "light" ? LIGHT : DARK}
+				theme={mounted && resolvedTheme === "light" ? LIGHT : DARK}
 			>
 				{children}
 			</RainbowKitProvider>

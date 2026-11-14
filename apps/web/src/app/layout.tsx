@@ -26,6 +26,7 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
 	title: { default: "Aeon", template: "%s · Aeon" },
 	description: "Agents that hire agents, on 0G.",
+	icons: { icon: "/logo.svg" },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
