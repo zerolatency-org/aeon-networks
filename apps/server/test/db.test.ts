@@ -18,6 +18,7 @@ describe("migrations", () => {
 		expect(rows.rows.map((r) => r.table_name)).toEqual([
 			"account",
 			"agent_drafts",
+			"agent_tasks",
 			"agent_wallets",
 			"agents",
 			"approvals",
@@ -32,6 +33,7 @@ describe("migrations", () => {
 			"listings",
 			"revenue_events",
 			"session",
+			"spending_policies",
 			"usage_events",
 			"user",
 			"verification",
