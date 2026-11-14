@@ -1,0 +1,26 @@
+{
+	"name": "@aeon/harness",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./*": "./src/*.ts"
+	},
+	"scripts": {
+		"build": "tsc -b",
+		"check-types": "tsc -b",
+		"test": "bun test",
+		"test:live": "LIVE=1 bun test --timeout 120000 test/router.live.test.ts"
+	},
+	"dependencies": {
+		"@ai-sdk/openai-compatible": "3.0.85",
+		"ai": "7.0.163",
+		"viem": "2.57.16",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@ai-sdk/provider": "4.0.36",
+		"@aeon/config": "workspace:*",
+		"@types/bun": "catalog:",
+		"typescript": "catalog:"
+	}
+}
