@@ -1,0 +1,23 @@
+{
+	"name": "@aeon/chain",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./*": "./src/*.ts"
+	},
+	"scripts": {
+		"build": "tsc -b",
+		"check-types": "tsc -b",
+		"gen": "bun scripts/gen-abis.ts",
+		"test": "bun test"
+	},
+	"dependencies": {
+		"viem": "2.57.16",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@aeon/config": "workspace:*",
+		"@types/bun": "catalog:",
+		"typescript": "catalog:"
+	}
+}

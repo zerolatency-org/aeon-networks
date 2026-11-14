@@ -74,6 +74,18 @@
         "typescript": "catalog:",
       },
     },
+    "packages/chain": {
+      "name": "@aeon/chain",
+      "dependencies": {
+        "viem": "2.57.16",
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@aeon/config": "workspace:*",
+        "@types/bun": "catalog:",
+        "typescript": "catalog:",
+      },
+    },
     "packages/config": {
       "name": "@aeon/config",
       "version": "0.0.0",
@@ -111,6 +123,8 @@
     "@aeon/api": ["@aeon/api@workspace:packages/api"],
 
     "@aeon/auth": ["@aeon/auth@workspace:packages/auth"],
+
+    "@aeon/chain": ["@aeon/chain@workspace:packages/chain"],
 
     "@aeon/config": ["@aeon/config@workspace:packages/config"],
 
