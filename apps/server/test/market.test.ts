@@ -173,4 +173,12 @@ describe("market search", () => {
 		const res = await t.app.request("/api/market/agents?cursor=not-a-cursor");
 		expect(res.status).toBe(400);
 	});
+
+	test("GET /market/min-price returns minimum listing price", async () => {
+		const res = await t.app.request("/api/market/min-price");
+		expect(res.status).toBe(200);
+		const body = await res.json();
+		expect(body).toHaveProperty("minPriceWei");
+		expect(typeof body.minPriceWei).toBe("string");
+	});
 });

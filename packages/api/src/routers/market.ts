@@ -249,6 +249,25 @@ export const marketRouter = {
 			};
 		}),
 
+	minPrice: publicProcedure
+		.route({ method: "GET", path: "/market/min-price" })
+		.handler(async ({ context }) => {
+			const { aeon } = context;
+			try {
+				if (!aeon?.client || !aeon?.deployment?.registry) {
+					return { minPriceWei: "1000000000000000" };
+				}
+				const minPrice = await aeon.client.readContract({
+					address: aeon.deployment.registry,
+					abi: aeonRegistryAbi,
+					functionName: "minPrice",
+				});
+				return { minPriceWei: minPrice.toString() };
+			} catch {
+				return { minPriceWei: "1000000000000000" };
+			}
+		}),
+
 	prepareListing: aeonProcedure
 		.route({ method: "POST", path: "/market/listings/prepare" })
 		.input(
