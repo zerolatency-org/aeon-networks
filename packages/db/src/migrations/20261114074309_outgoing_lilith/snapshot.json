@@ -1,0 +1,881 @@
+{
+	"type": "diff",
+	"version": "9",
+	"dialect": "postgres",
+	"id": "0332a237-e976-4d8d-a386-071658ca36b7",
+	"prevIds": ["64ac96e6-0134-4d94-a148-c47b4f55f530"],
+	"footprints": [
+		{
+			"statementType": "create_table",
+			"statementTarget": ["table", "public", "agent_wallets"],
+			"writes": [
+				"s|tbl|public.agent_wallets",
+				"n|tbl|public.agent_wallets",
+				"e|tbl|public.agent_wallets",
+				"n|rel|public.agent_wallets",
+				"n|type|public.agent_wallets",
+				"n|rel|public.agent_wallets_pkey",
+				"n|rel|public.agent_wallets_address_key"
+			],
+			"reads": ["n|sch|public"]
+		},
+		{
+			"statementType": "create_table",
+			"statementTarget": ["table", "public", "agents"],
+			"writes": [
+				"s|tbl|public.agents",
+				"n|tbl|public.agents",
+				"e|tbl|public.agents",
+				"n|rel|public.agents",
+				"n|type|public.agents",
+				"n|rel|public.agents_pkey",
+				"n|rel|public.agents_token_id_key"
+			],
+			"reads": ["n|sch|public"]
+		},
+		{
+			"statementType": "create_table",
+			"statementTarget": ["table", "public", "wallet_address"],
+			"writes": [
+				"s|tbl|public.wallet_address",
+				"n|tbl|public.wallet_address",
+				"e|tbl|public.wallet_address",
+				"n|rel|public.wallet_address",
+				"n|type|public.wallet_address",
+				"n|rel|public.wallet_address_pkey"
+			],
+			"reads": ["n|sch|public"]
+		},
+		{
+			"statementType": "create_index",
+			"statementTarget": [
+				"index",
+				"public",
+				"agents",
+				"agents_owner_address_idx"
+			],
+			"writes": [
+				"s|idx|public.agents_owner_address_idx",
+				"n|idx|public.agents_owner_address_idx",
+				"e|idx|public.agents_owner_address_idx",
+				"n|rel|public.agents_owner_address_idx"
+			],
+			"reads": [
+				"n|tbl|public.agents",
+				"n|sch|public",
+				"n|col|public.agents.owner_address"
+			]
+		},
+		{
+			"statementType": "create_index",
+			"statementTarget": [
+				"index",
+				"public",
+				"agents",
+				"agents_owner_user_id_idx"
+			],
+			"writes": [
+				"s|idx|public.agents_owner_user_id_idx",
+				"n|idx|public.agents_owner_user_id_idx",
+				"e|idx|public.agents_owner_user_id_idx",
+				"n|rel|public.agents_owner_user_id_idx"
+			],
+			"reads": [
+				"n|tbl|public.agents",
+				"n|sch|public",
+				"n|col|public.agents.owner_user_id"
+			]
+		},
+		{
+			"statementType": "create_index",
+			"statementTarget": [
+				"index",
+				"public",
+				"wallet_address",
+				"walletAddress_userId_idx"
+			],
+			"writes": [
+				"s|idx|public.walletAddress_userId_idx",
+				"n|idx|public.walletAddress_userId_idx",
+				"e|idx|public.walletAddress_userId_idx",
+				"n|rel|public.walletAddress_userId_idx"
+			],
+			"reads": [
+				"n|tbl|public.wallet_address",
+				"n|sch|public",
+				"n|col|public.wallet_address.user_id"
+			]
+		},
+		{
+			"statementType": "create_index",
+			"statementTarget": [
+				"index",
+				"public",
+				"wallet_address",
+				"wallet_address_address_lower_uq"
+			],
+			"writes": [
+				"s|idx|public.wallet_address_address_lower_uq",
+				"n|idx|public.wallet_address_address_lower_uq",
+				"e|idx|public.wallet_address_address_lower_uq",
+				"n|rel|public.wallet_address_address_lower_uq"
+			],
+			"reads": ["n|tbl|public.wallet_address", "n|sch|public"]
+		},
+		{
+			"statementType": "create_fk",
+			"statementTarget": ["table", "public", "agent_wallets"],
+			"writes": [
+				"s|fk|public.agent_wallets.agent_wallets_agent_id_agents_id_fkey",
+				"n|fk|public.agent_wallets.agent_wallets_agent_id_agents_id_fkey",
+				"e|fk|public.agent_wallets.agent_wallets_agent_id_agents_id_fkey",
+				"n|con|public.agent_wallets.agent_wallets_agent_id_agents_id_fkey"
+			],
+			"reads": [
+				"n|tbl|public.agent_wallets",
+				"n|sch|public",
+				"n|tbl|public.agents",
+				"n|sch|public",
+				"n|col|public.agent_wallets.agent_id",
+				"n|col|public.agents.id",
+				"e|uniqueness|public.agents.id"
+			]
+		},
+		{
+			"statementType": "create_fk",
+			"statementTarget": ["table", "public", "agents"],
+			"writes": [
+				"s|fk|public.agents.agents_owner_user_id_user_id_fkey",
+				"n|fk|public.agents.agents_owner_user_id_user_id_fkey",
+				"e|fk|public.agents.agents_owner_user_id_user_id_fkey",
+				"n|con|public.agents.agents_owner_user_id_user_id_fkey"
+			],
+			"reads": [
+				"n|tbl|public.agents",
+				"n|sch|public",
+				"n|tbl|public.user",
+				"n|sch|public",
+				"n|col|public.agents.owner_user_id",
+				"n|col|public.user.id",
+				"e|uniqueness|public.user.id"
+			]
+		},
+		{
+			"statementType": "create_fk",
+			"statementTarget": ["table", "public", "wallet_address"],
+			"writes": [
+				"s|fk|public.wallet_address.wallet_address_user_id_user_id_fkey",
+				"n|fk|public.wallet_address.wallet_address_user_id_user_id_fkey",
+				"e|fk|public.wallet_address.wallet_address_user_id_user_id_fkey",
+				"n|con|public.wallet_address.wallet_address_user_id_user_id_fkey"
+			],
+			"reads": [
+				"n|tbl|public.wallet_address",
+				"n|sch|public",
+				"n|tbl|public.user",
+				"n|sch|public",
+				"n|col|public.wallet_address.user_id",
+				"n|col|public.user.id",
+				"e|uniqueness|public.user.id"
+			]
+		}
+	],
+	"deltas": [
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"name": "agent_wallets",
+				"isRlsEnabled": false,
+				"entityType": "tables"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"name": "agents",
+				"isRlsEnabled": false,
+				"entityType": "tables"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"name": "wallet_address",
+				"isRlsEnabled": false,
+				"entityType": "tables"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agent_wallets",
+				"name": "agent_id",
+				"type": "uuid",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agent_wallets",
+				"name": "address",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agent_wallets",
+				"name": "public_key",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agent_wallets",
+				"name": "key_cipher",
+				"type": "bytea",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agent_wallets",
+				"name": "key_version",
+				"type": "integer",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "1",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agent_wallets",
+				"name": "created_at",
+				"type": "timestamp with time zone",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "now()",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agent_wallets",
+				"name": "rotated_at",
+				"type": "timestamp with time zone",
+				"typeSchema": null,
+				"notNull": false,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "id",
+				"type": "uuid",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "gen_random_uuid()",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "token_id",
+				"type": "numeric(78,0)",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "owner_address",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "owner_user_id",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": false,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "name",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "description",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "''",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "avatar_kind",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "'preset'",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "avatar_ref",
+				"type": "jsonb",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "'\"p01\"'",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "model",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "persona_cipher",
+				"type": "bytea",
+				"typeSchema": null,
+				"notNull": false,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "config_root_hash",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": false,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "status",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "'active'",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "minted_tx",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "minted_block",
+				"type": "numeric(78,0)",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "created_at",
+				"type": "timestamp with time zone",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": "now()",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "wallet_address",
+				"name": "id",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "wallet_address",
+				"name": "user_id",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "wallet_address",
+				"name": "address",
+				"type": "text",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "wallet_address",
+				"name": "chain_id",
+				"type": "integer",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "wallet_address",
+				"name": "is_primary",
+				"type": "boolean",
+				"typeSchema": null,
+				"notNull": false,
+				"dimensions": 0,
+				"default": "false",
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "wallet_address",
+				"name": "created_at",
+				"type": "timestamp",
+				"typeSchema": null,
+				"notNull": true,
+				"dimensions": 0,
+				"default": null,
+				"generated": null,
+				"identity": null,
+				"entityType": "columns"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "agents_owner_address_idx",
+				"nameExplicit": true,
+				"columns": [
+					{
+						"value": "owner_address",
+						"isExpression": false,
+						"asc": true,
+						"nullsFirst": false,
+						"opclass": null
+					}
+				],
+				"isUnique": false,
+				"where": null,
+				"with": "",
+				"method": "btree",
+				"concurrently": false,
+				"entityType": "indexes"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "agents_owner_user_id_idx",
+				"nameExplicit": true,
+				"columns": [
+					{
+						"value": "owner_user_id",
+						"isExpression": false,
+						"asc": true,
+						"nullsFirst": false,
+						"opclass": null
+					}
+				],
+				"isUnique": false,
+				"where": null,
+				"with": "",
+				"method": "btree",
+				"concurrently": false,
+				"entityType": "indexes"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "wallet_address",
+				"name": "walletAddress_userId_idx",
+				"nameExplicit": true,
+				"columns": [
+					{
+						"value": "user_id",
+						"isExpression": false,
+						"asc": true,
+						"nullsFirst": false,
+						"opclass": null
+					}
+				],
+				"isUnique": false,
+				"where": null,
+				"with": "",
+				"method": "btree",
+				"concurrently": false,
+				"entityType": "indexes"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "wallet_address",
+				"name": "wallet_address_address_lower_uq",
+				"nameExplicit": true,
+				"columns": [
+					{
+						"value": "lower(\"address\")",
+						"isExpression": true,
+						"asc": true,
+						"nullsFirst": false,
+						"opclass": null
+					}
+				],
+				"isUnique": true,
+				"where": null,
+				"with": "",
+				"method": "btree",
+				"concurrently": false,
+				"entityType": "indexes"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agent_wallets",
+				"name": "agent_wallets_agent_id_agents_id_fkey",
+				"nameExplicit": false,
+				"columns": ["agent_id"],
+				"schemaTo": "public",
+				"tableTo": "agents",
+				"columnsTo": ["id"],
+				"onUpdate": "NO ACTION",
+				"onDelete": "CASCADE",
+				"entityType": "fks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "agents_owner_user_id_user_id_fkey",
+				"nameExplicit": false,
+				"columns": ["owner_user_id"],
+				"schemaTo": "public",
+				"tableTo": "user",
+				"columnsTo": ["id"],
+				"onUpdate": "NO ACTION",
+				"onDelete": "SET NULL",
+				"entityType": "fks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "wallet_address",
+				"name": "wallet_address_user_id_user_id_fkey",
+				"nameExplicit": false,
+				"columns": ["user_id"],
+				"schemaTo": "public",
+				"tableTo": "user",
+				"columnsTo": ["id"],
+				"onUpdate": "NO ACTION",
+				"onDelete": "CASCADE",
+				"entityType": "fks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agent_wallets",
+				"name": "agent_wallets_pkey",
+				"columns": ["agent_id"],
+				"nameExplicit": false,
+				"entityType": "pks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "agents_pkey",
+				"columns": ["id"],
+				"nameExplicit": false,
+				"entityType": "pks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "wallet_address",
+				"name": "wallet_address_pkey",
+				"columns": ["id"],
+				"nameExplicit": false,
+				"entityType": "pks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agent_wallets",
+				"name": "agent_wallets_address_key",
+				"nameExplicit": false,
+				"columns": ["address"],
+				"nullsNotDistinct": false,
+				"entityType": "uniques"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "agents_token_id_key",
+				"nameExplicit": false,
+				"columns": ["token_id"],
+				"nullsNotDistinct": false,
+				"entityType": "uniques"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agent_wallets",
+				"name": "agent_wallets_address_lower",
+				"value": "\"address\" ~ '^0x[0-9a-f]{40}$'",
+				"entityType": "checks"
+			}
+		},
+		{
+			"op": "create",
+			"row": {
+				"schema": "public",
+				"table": "agents",
+				"name": "agents_owner_address_lower",
+				"value": "\"owner_address\" ~ '^0x[0-9a-f]{40}$'",
+				"entityType": "checks"
+			}
+		}
+	]
+}

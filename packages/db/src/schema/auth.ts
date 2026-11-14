@@ -1,5 +1,13 @@
-import { defineRelationsPart } from "drizzle-orm";
-import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { defineRelationsPart, sql } from "drizzle-orm";
+import {
+	boolean,
+	index,
+	integer,
+	pgTable,
+	text,
+	timestamp,
+	uniqueIndex,
+} from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),
@@ -73,8 +81,31 @@ export const verification = pgTable(
 	(table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
+// Table owned by better-auth's SIWE plugin (model "walletAddress").
+// Aeon rule: one wallet address belongs to at most one user, on any chain,
+// so the address is unique case-insensitively. The plugin stores checksum case.
+export const walletAddress = pgTable(
+	"wallet_address",
+	{
+		id: text("id").primaryKey(),
+		userId: text("user_id")
+			.notNull()
+			.references(() => user.id, { onDelete: "cascade" }),
+		address: text("address").notNull(),
+		chainId: integer("chain_id").notNull(),
+		isPrimary: boolean("is_primary").default(false),
+		createdAt: timestamp("created_at").notNull(),
+	},
+	(table) => [
+		index("walletAddress_userId_idx").on(table.userId),
+		uniqueIndex("wallet_address_address_lower_uq").on(
+			sql`lower(${table.address})`,
+		),
+	],
+);
+
 export const authRelations = defineRelationsPart(
-	{ user, session, account, verification },
+	{ user, session, account, verification, walletAddress },
 	(r) => ({
 		user: {
 			sessions: r.many.session({
@@ -84,6 +115,10 @@ export const authRelations = defineRelationsPart(
 			accounts: r.many.account({
 				from: r.user.id,
 				to: r.account.userId,
+			}),
+			wallets: r.many.walletAddress({
+				from: r.user.id,
+				to: r.walletAddress.userId,
 			}),
 		},
 		session: {
@@ -95,6 +130,12 @@ export const authRelations = defineRelationsPart(
 		account: {
 			user: r.one.user({
 				from: r.account.userId,
+				to: r.user.id,
+			}),
+		},
+		walletAddress: {
+			user: r.one.user({
+				from: r.walletAddress.userId,
 				to: r.user.id,
 			}),
 		},
