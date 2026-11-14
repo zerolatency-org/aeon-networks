@@ -52,6 +52,11 @@
 		},
 		"db:down": {
 			"cache": false
+		},
+		"test": {
+			"dependsOn": ["^check-types"],
+			"cache": false,
+			"passThroughEnv": ["TEST_DATABASE_URL"]
 		}
 	},
 	"globalEnv": [
