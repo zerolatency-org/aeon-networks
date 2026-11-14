@@ -15,15 +15,20 @@ export function Card({ className, ...props }: ComponentProps<"div">) {
 	);
 }
 
-export function CardTitle({ className, ...props }: ComponentProps<"h3">) {
+export function CardTitle({
+	className,
+	children,
+	...props
+}: ComponentProps<"h3">) {
 	return (
-		// biome-ignore lint/a11y/useHeadingContent: the content arrives as children
 		<h3
 			className={cn(
 				"font-serif text-[28px] leading-[34px] tracking-tight",
 				className,
 			)}
 			{...props}
-		/>
+		>
+			{children}
+		</h3>
 	);
 }
