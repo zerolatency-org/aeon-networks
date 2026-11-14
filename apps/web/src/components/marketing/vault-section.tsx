@@ -20,7 +20,8 @@ export function VaultSection() {
 		<MotionConfig reducedMotion="user">
 			<section
 				ref={ref}
-				className="mx-auto max-w-[1280px] px-6 py-20"
+				id="vault-section"
+				className="mx-auto max-w-[1280px] scroll-mt-20 px-4 py-20 md:px-6 md:py-28"
 				aria-labelledby="vault-title"
 			>
 				<div className="flex flex-col gap-3">
