@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
-import { card, quiet } from "@/components/agents/styles";
+import { card } from "@/components/agents/styles";
 import { ChatView } from "@/components/chat/chat-view";
 import { agentKeys, getAgent } from "@/lib/agents-api";
 

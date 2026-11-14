@@ -194,9 +194,12 @@ export function chatReducer(state: ChatState, action: ChatAction): ChatState {
 			const trimmed = action.content.trim();
 			if (!trimmed) return state;
 
+			const targetUser = state.messages[lastUserIdx];
+			if (!targetUser) return state;
+
 			const preserved = state.messages.slice(0, lastUserIdx);
 			const updatedUser: ChatMessage = {
-				...state.messages[lastUserIdx]!,
+				...targetUser,
 				content: trimmed,
 			};
 			const newAssistant: ChatMessage = {

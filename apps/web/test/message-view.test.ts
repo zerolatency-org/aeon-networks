@@ -1,11 +1,6 @@
 // apps/web/test/message-view.test.ts
 import { describe, expect, test } from "bun:test";
-import {
-	escapeHtml,
-	isSafeUrl,
-	parseMessageBlocks,
-	type RenderBlock,
-} from "@/lib/message-view";
+import { escapeHtml, isSafeUrl, parseMessageBlocks } from "@/lib/message-view";
 
 describe("Message rendering rules", () => {
 	test("escapeHtml escapes dangerous HTML characters to prevent XSS", () => {

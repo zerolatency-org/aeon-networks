@@ -1,10 +1,6 @@
 // apps/web/test/chat-reducer.test.ts
 import { describe, expect, test } from "bun:test";
-import {
-	type ChatState,
-	chatReducer,
-	initialChatState,
-} from "@/lib/chat-reducer";
+import { chatReducer, initialChatState } from "@/lib/chat-reducer";
 
 describe("Conversation reducer", () => {
 	test("initial state is idle with empty messages and no usage", () => {
