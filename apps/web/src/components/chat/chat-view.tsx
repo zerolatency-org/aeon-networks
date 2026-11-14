@@ -4,7 +4,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useReducer, useRef, useState } from "react";
 
+import { AgentFace } from "@/components/agents/agent-face";
 import type { AgentView } from "@/lib/agents-parse";
+import { avatarTint } from "@/lib/avatar";
+import { fromServerAvatar } from "@/lib/avatar-choice";
 import type { ModelPricing } from "@/lib/chat-cost";
 import {
 	type ChatState,
@@ -51,6 +54,12 @@ export function ChatView({
 		(m) => m.id === agent.model,
 	);
 
+	const face = fromServerAvatar(agent.avatarKind, agent.avatarRef) ?? {
+		kind: "dicebear" as const,
+		seed: agent.id,
+		bg: avatarTint(agent.id),
+	};
+
 	const persistState = useCallback(
 		(nextState: ChatState) => {
 			if (nextState.messages.length === 0) return;
@@ -61,6 +70,8 @@ export function ChatView({
 				id: threadId.current,
 				agentId: agent.id,
 				agentName: agent.name,
+				avatarKind: agent.avatarKind,
+				avatarRef: agent.avatarRef,
 				title,
 				createdAt: existing.current?.createdAt ?? new Date().toISOString(),
 				updatedAt: new Date().toISOString(),
@@ -68,7 +79,7 @@ export function ChatView({
 				totalUsage: nextState.usage ?? undefined,
 			});
 		},
-		[agent.id, agent.name],
+		[agent.id, agent.name, agent.avatarKind, agent.avatarRef],
 	);
 
 	const runTurn = async (
@@ -224,11 +235,14 @@ export function ChatView({
 	return (
 		<div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
 			<header className="border-border mb-6 flex items-center justify-between border-b pb-4">
-				<div>
-					<h1 className="font-serif text-2xl font-semibold">{agent.name}</h1>
-					<p className="text-fg-3 text-xs">
-						Model: {agent.model} · #{agent.tokenId}
-					</p>
+				<div className="flex items-center gap-3">
+					<AgentFace face={face} size={44} />
+					<div>
+						<h1 className="font-serif text-2xl font-semibold">{agent.name}</h1>
+						<p className="text-fg-3 text-xs">
+							Model: {agent.model} · #{agent.tokenId}
+						</p>
+					</div>
 				</div>
 			</header>
 
@@ -236,6 +250,7 @@ export function ChatView({
 				messages={state.messages}
 				agentId={agent.id}
 				agentName={agent.name}
+				face={face}
 				isStreaming={state.status === "streaming"}
 				modelPricing={currentModelPricing}
 				latestUsage={state.usage}

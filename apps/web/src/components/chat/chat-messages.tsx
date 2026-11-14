@@ -4,6 +4,7 @@
 import { useEffect, useRef } from "react";
 
 import { AgentFace } from "@/components/agents/agent-face";
+import type { AvatarChoice } from "@/lib/agents-parse";
 import { avatarTint } from "@/lib/avatar";
 import {
 	calculateChatCost,
@@ -17,6 +18,7 @@ export function ChatMessages({
 	messages,
 	agentId,
 	agentName,
+	face,
 	isStreaming,
 	modelPricing,
 	latestUsage,
@@ -26,6 +28,7 @@ export function ChatMessages({
 	messages: ChatMessage[];
 	agentId: string;
 	agentName: string;
+	face?: AvatarChoice | null;
 	isStreaming: boolean;
 	modelPricing?: ModelPricing | null;
 	latestUsage?: ChatUsage | null;
@@ -40,7 +43,7 @@ export function ChatMessages({
 		bottomRef.current?.scrollIntoView({ behavior: "smooth" });
 	}, [messages, messages[messages.length - 1]?.content]);
 
-	const face = {
+	const agentFace: AvatarChoice = face ?? {
 		kind: "dicebear" as const,
 		seed: agentId,
 		bg: avatarTint(agentId),
@@ -53,7 +56,7 @@ export function ChatMessages({
 			{messages.length === 0 && (
 				<div className="border-border bg-surface-1 rounded-2xl border p-8 text-center">
 					<div className="mx-auto flex h-14 w-14 items-center justify-center">
-						<AgentFace face={face} size={54} />
+						<AgentFace face={agentFace} size={54} />
 					</div>
 					<h3 className="mt-3 font-serif text-lg font-medium">
 						Chat with {agentName}
@@ -77,7 +80,7 @@ export function ChatMessages({
 					>
 						{!isUser && (
 							<div className="shrink-0 pt-0.5">
-								<AgentFace face={face} size={32} />
+								<AgentFace face={agentFace} size={32} />
 							</div>
 						)}
 

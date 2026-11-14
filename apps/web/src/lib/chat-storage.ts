@@ -5,6 +5,8 @@ export type ChatThread = {
 	id: string;
 	agentId: string;
 	agentName: string;
+	avatarKind?: string | null;
+	avatarRef?: unknown;
 	title: string;
 	createdAt: string;
 	updatedAt: string;
