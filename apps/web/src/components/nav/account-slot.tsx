@@ -5,8 +5,8 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { WalletButton } from "@/components/wallet/wallet-button";
 import { useSession } from "@/lib/use-session";
+import { BalancePill } from "./balance-pill";
 
 export function AccountSlot() {
 	const session = useSession();
@@ -27,7 +27,7 @@ export function AccountSlot() {
 				</Button>
 			);
 		case "ready":
-			return <WalletButton />;
+			return <BalancePill address={session.wallet.address} />;
 		case "error":
 			return null;
 	}
