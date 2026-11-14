@@ -8,6 +8,7 @@
 		"compile": "bun build --compile --no-compile-autoload-dotenv --minify --sourcemap --bytecode ./src/index.ts --outfile server",
 		"dev": "bun run --hot src/index.ts",
 		"start": "bun run dist/index.mjs",
+		"test": "bun test",
 		"env:generate": "varlock codegen",
 		"auth:generate": "varlock run -- bun x auth@latest generate --config src/services.ts --output ../../packages/db/src/schema/auth.ts --yes"
 	},
@@ -26,7 +27,9 @@
 	"devDependencies": {
 		"@aeon/config": "workspace:*",
 		"@types/bun": "catalog:",
+		"drizzle-orm": "catalog:",
 		"tsdown": "^0.23.0",
-		"typescript": "catalog:"
+		"typescript": "catalog:",
+		"viem": "2.57.16"
 	}
 }
