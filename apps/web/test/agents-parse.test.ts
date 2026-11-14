@@ -137,7 +137,7 @@ describe("parsePolicy", () => {
 		dailyCap: "300",
 		minJobsCompleted: 0,
 		maxHireDepth: 1,
-		evaluatorMode: "own_agent",
+		evaluatorMode: "own_agent" as const,
 	};
 	test("accepts a policy and rejects bad caps", () => {
 		expect(parsePolicy(ok)).toEqual(ok);

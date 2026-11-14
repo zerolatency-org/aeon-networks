@@ -129,12 +129,15 @@ export type AvatarChoice =
 	| { kind: "preset"; id: string }
 	| { kind: "dicebear"; seed: string; bg: string };
 
+export type EvaluatorMode = "own_agent" | "aeon_verifier";
+
 export type PolicyInput = {
 	perJobCap: string;
 	dailyCap: string;
 	minJobsCompleted: number;
 	maxHireDepth: number;
-	evaluatorMode: string;
+	/** who judges the work this agent buys: itself, or the Aeon Verifier */
+	evaluatorMode: EvaluatorMode;
 };
 
 const DIGITS = /^\d+$/;
@@ -149,7 +152,8 @@ export function parsePolicy(json: unknown): PolicyInput | null {
 		!Number.isInteger(p.maxHireDepth)
 	)
 		return null;
-	if (typeof p.evaluatorMode !== "string") return null;
+	if (p.evaluatorMode !== "own_agent" && p.evaluatorMode !== "aeon_verifier")
+		return null;
 	return {
 		perJobCap: p.perJobCap,
 		dailyCap: p.dailyCap,

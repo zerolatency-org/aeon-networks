@@ -105,7 +105,7 @@ describe("policy calls", () => {
 		dailyCap: "300",
 		minJobsCompleted: 0,
 		maxHireDepth: 1,
-		evaluatorMode: "own_agent",
+		evaluatorMode: "own_agent" as const,
 	};
 	test("getPolicy reads and setPolicy PUTs the body", async () => {
 		const f = fake(200, pol);
