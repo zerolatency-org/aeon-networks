@@ -11,6 +11,7 @@ import {
 	deriveVaultKey,
 	type EnvelopeAad,
 	envelopeHash,
+	envelopeRecipients,
 	NotARecipientError,
 	openEnvelope,
 	parseEnvelope,
@@ -138,6 +139,36 @@ describe("envelope v1", () => {
 				recipients: [{ address: a.address, publicKey: b.publicKey }],
 			}),
 		).rejects.toThrow();
+	});
+
+	test("envelopeRecipients returns every recipient with their address and public key", async () => {
+		const rs = recipients();
+		const env = await createEnvelope({
+			plaintext: utf8("task"),
+			aad,
+			recipients: rs,
+		});
+		expect(envelopeRecipients(env)).toEqual(
+			rs.map((r) => ({
+				address: r.address.toLowerCase(),
+				publicKey: r.publicKey,
+			})),
+		);
+	});
+
+	test("envelopeRecipients throws if a public key does not belong to the address", () => {
+		const a = createAgentWallet();
+		const b = createAgentWallet();
+		const fakeEnv = {
+			v: 1 as const,
+			alg: "AES-256-GCM+ECIES-secp256k1" as const,
+			iv: "AAAA",
+			ct: "AAAA",
+			aad,
+			keys: { [a.address.toLowerCase()]: "AAAA" },
+			meta: { publicKeys: { [a.address.toLowerCase()]: b.publicKey } },
+		};
+		expect(() => envelopeRecipients(fakeEnv)).toThrow();
 	});
 });
 

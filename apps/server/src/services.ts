@@ -36,5 +36,9 @@ function loadAeonServices(): AeonServices | null {
 		box: createSecretBox(ENV.MASTER_KEY),
 		router: { baseURL: ENV.ROUTER_BASE_URL, apiKey: ENV.ROUTER_API_KEY },
 		catalog: DEFAULT_CATALOG,
+		mailbox: {
+			maxBytes: ENV.MAILBOX_MAX_BYTES,
+			quotaBytes: ENV.MAILBOX_QUOTA_BYTES,
+		},
 	};
 }

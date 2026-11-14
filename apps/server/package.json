@@ -21,6 +21,7 @@
 		"@aeon/crypto": "workspace:*",
 		"@aeon/db": "workspace:*",
 		"@aeon/harness": "workspace:*",
+		"@aeon/storage": "workspace:*",
 		"@orpc/openapi": "catalog:",
 		"@orpc/server": "catalog:",
 		"@orpc/zod": "catalog:",

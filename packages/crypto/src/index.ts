@@ -17,6 +17,7 @@ export {
 	type Envelope,
 	type EnvelopeAad,
 	envelopeHash,
+	envelopeRecipients,
 	NotARecipientError,
 	openEnvelope,
 	parseEnvelope,

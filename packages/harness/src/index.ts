@@ -27,4 +27,5 @@ export {
 	type ToolRegistry,
 } from "./registry";
 export { chatRole } from "./roles/chat";
+export { providerRole, quoteTask } from "./roles/provider";
 export { walletBalanceTool } from "./tools/wallet";

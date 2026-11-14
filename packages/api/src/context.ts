@@ -13,6 +13,7 @@ export type AeonServices = {
 	box: SecretBox;
 	router: RouterConfig;
 	catalog: Catalog;
+	mailbox?: { maxBytes: number; quotaBytes: number };
 };
 
 export type Context = {

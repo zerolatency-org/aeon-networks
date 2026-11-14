@@ -26,7 +26,11 @@ export type Envelope = {
 	ct: string;
 	aad: EnvelopeAad;
 	keys: Record<string, string>;
-	meta?: { maxResultBytes?: number; contentType?: string };
+	meta?: {
+		maxResultBytes?: number;
+		contentType?: string;
+		publicKeys?: Record<string, Hex>;
+	};
 };
 
 export type Recipient = { address: Address; publicKey: Hex };
@@ -61,6 +65,7 @@ export async function createEnvelope(opts: {
 		utf8(canonicalJson(aad)),
 	);
 	const keys: Record<string, string> = {};
+	const publicKeys: Record<string, Hex> = {};
 	for (const r of opts.recipients) {
 		if (
 			publicKeyToAddress(r.publicKey).toLowerCase() !== r.address.toLowerCase()
@@ -68,6 +73,7 @@ export async function createEnvelope(opts: {
 			throw new Error(`public key does not belong to ${r.address}`);
 		}
 		keys[r.address.toLowerCase()] = toB64url(wrapKey(r.publicKey, contentKey));
+		publicKeys[r.address.toLowerCase()] = r.publicKey;
 	}
 	return {
 		v: 1,
@@ -76,8 +82,22 @@ export async function createEnvelope(opts: {
 		ct: toB64url(ct),
 		aad,
 		keys,
-		meta: opts.meta,
+		meta: { ...opts.meta, publicKeys },
 	};
+}
+
+export function envelopeRecipients(env: Envelope): Recipient[] {
+	const publicKeys = env.meta?.publicKeys ?? {};
+	return Object.keys(env.keys).map((address) => {
+		const publicKey = publicKeys[address];
+		if (
+			!publicKey ||
+			publicKeyToAddress(publicKey).toLowerCase() !== address.toLowerCase()
+		) {
+			throw new Error(`no valid public key for ${address}`);
+		}
+		return { address: address as Address, publicKey };
+	});
 }
 
 export async function openEnvelope(
