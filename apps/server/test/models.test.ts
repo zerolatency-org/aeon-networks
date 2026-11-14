@@ -50,6 +50,13 @@ describe("models", () => {
 					inputPrice: null,
 					outputPrice: null,
 				},
+				{
+					id: "qwen3-omni-flash",
+					label: "Qwen3 Omni Flash",
+					toolCalling: true,
+					inputPrice: "1170000000000",
+					outputPrice: "4710000000000",
+				},
 			],
 		});
 	});
