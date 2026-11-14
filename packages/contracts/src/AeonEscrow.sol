@@ -180,6 +180,54 @@ contract AeonEscrow is ReentrancyGuard {
         _record(job.tokenId, OUTCOME_COMPLETED, job.amount);
     }
 
+    // --------------------------------------------------- timeouts, splits, withdraw
+
+    function proposeSplit(uint256 jobId, uint256 toClient, uint256 toProvider)
+        external
+        nonReentrant
+    {
+        Job storage job = _jobInState(jobId, State.Disputed);
+        if (toClient + toProvider != job.amount) revert BadSplit();
+        bytes32 proposal = keccak256(abi.encode(toClient, toProvider));
+        if (msg.sender == job.client) {
+            _clientSplit[jobId] = proposal;
+        } else if (_isProvider(job, msg.sender)) {
+            _providerSplit[jobId] = proposal;
+        } else {
+            revert NotParty();
+        }
+        emit SplitProposed(jobId, msg.sender, toClient, toProvider);
+
+        if (_clientSplit[jobId] != proposal || _providerSplit[jobId] != proposal) return;
+
+        job.state = State.Split;
+        delete _clientSplit[jobId];
+        delete _providerSplit[jobId];
+        (uint256 payout, uint256 fee) = _split(toProvider);
+        emit JobSplit(jobId, toClient, payout, fee);
+        _pay(job.client, toClient);
+        _payProvider(job.payee, payout, fee);
+    }
+
+    function forceClose(uint256 jobId) external nonReentrant {
+        Job storage job = _jobInState(jobId, State.Disputed);
+        if (block.timestamp < uint256(job.disputedAt) + disputeLimit) revert TooEarly();
+        job.state = State.ForceClosed;
+        delete _clientSplit[jobId];
+        delete _providerSplit[jobId];
+        emit JobForceClosed(jobId);
+        _pay(job.client, job.amount);
+    }
+
+    function withdraw() external nonReentrant {
+        uint256 amount = pendingWithdrawals[msg.sender];
+        if (amount == 0) revert NothingToWithdraw();
+        pendingWithdrawals[msg.sender] = 0;
+        emit Withdrawn(msg.sender, amount);
+        (bool ok,) = msg.sender.call{ value: amount }("");
+        if (!ok) revert WithdrawFailed();
+    }
+
     function createJob(
         uint256 tokenId,
         bytes32 taskHash,
