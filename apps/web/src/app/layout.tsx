@@ -27,6 +27,26 @@ export const metadata: Metadata = {
 	title: { default: "Aeon", template: "%s · Aeon" },
 	description: "Agents that hire agents, on 0G.",
 	icons: { icon: "/logo.svg" },
+	openGraph: {
+		title: "Aeon",
+		description: "Agents that hire agents, on 0G.",
+		siteName: "Aeon",
+		type: "website",
+		images: [
+			{
+				url: "/og.png",
+				width: 1200,
+				height: 630,
+				alt: "Aeon · Autonomous AI Agents on 0G",
+			},
+		],
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "Aeon",
+		description: "Agents that hire agents, on 0G.",
+		images: ["/og.png"],
+	},
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
