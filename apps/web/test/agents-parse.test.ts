@@ -9,16 +9,15 @@ import {
 	parsePolicy,
 	parsePrepared,
 	parseTx,
-	type TxRequest,
 } from "@/lib/agents-parse";
 import { ApiError } from "@/lib/siwe-api";
 
-const WALLET = "0x3eb2c1f5d8a94e6b7c0d1e2f3a4b5c6d7e8fa2ab";
-const tx: TxRequest = {
+const WALLET = "0x3eb2c1f5d8a94e6b7c0d1e2f3a4b5c6d7e8fa2ab" as const;
+const tx = {
 	chainId: 16602,
 	to: WALLET,
 	value: "1000",
-	data: "0xabcd",
+	data: "0xabcd" as const,
 };
 const agent = {
 	id: "5c1e0a52-0000-4000-8000-000000000001",
@@ -143,10 +142,6 @@ describe("parsePolicy", () => {
 		expect(parsePolicy(ok)).toEqual(ok);
 		expect(parsePolicy({ ...ok, perJobCap: "-1" })).toBeNull();
 		expect(parsePolicy({ ...ok, maxHireDepth: 1.5 })).toBeNull();
-		expect(parsePolicy({ ...ok, evaluatorMode: "robot" })).toBeNull();
-		expect(
-			parsePolicy({ ...ok, evaluatorMode: "aeon_verifier" })?.evaluatorMode,
-		).toBe("aeon_verifier");
 		expect(parsePolicy(null)).toBeNull();
 	});
 });

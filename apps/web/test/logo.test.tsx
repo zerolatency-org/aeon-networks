@@ -13,4 +13,13 @@ describe("Logo", () => {
 		expect(mark.getAttribute("height")).toBe("512");
 		expect((mark as HTMLImageElement).style.height).toBe("28px");
 	});
+
+	test("renders dark mode logo variant with matching dimensions", () => {
+		const { container } = render(<Logo />);
+		const darkImg = container.querySelector('img[src="/logo-dark.svg"]');
+		expect(darkImg).not.toBeNull();
+		expect(darkImg?.getAttribute("width")).toBe("431");
+		expect(darkImg?.getAttribute("height")).toBe("512");
+		expect(darkImg?.className).toContain("dark:block");
+	});
 });

@@ -9,15 +9,27 @@ export function Logo({
 	className?: string;
 }) {
 	return (
-		// biome-ignore lint/performance/noImgElement: SVGs are served directly and are not optimized by Next Image.
-		<img
-			src="/logo.svg"
-			alt="Aeon"
-			width={431}
-			height={512}
-			style={{ width: "auto", height: size }}
-			className={cn("shrink-0", className)}
-		/>
+		<>
+			{/* biome-ignore lint/performance/noImgElement: SVGs are served directly and are not optimized by Next Image. */}
+			<img
+				src="/logo.svg"
+				alt="Aeon"
+				width={431}
+				height={512}
+				style={{ width: "auto", height: size }}
+				className={cn("shrink-0 dark:hidden", className)}
+			/>
+			{/* biome-ignore lint/performance/noImgElement: SVGs are served directly and are not optimized by Next Image. */}
+			<img
+				src="/logo-dark.svg"
+				alt=""
+				aria-hidden="true"
+				width={431}
+				height={512}
+				style={{ width: "auto", height: size }}
+				className={cn("hidden shrink-0 dark:block", className)}
+			/>
+		</>
 	);
 }
 

@@ -31,11 +31,18 @@ export function posterShapes(g: Graph, width: number, height: number) {
 		x: width / 2,
 		y: height / 2,
 	};
+	const faces = g.faces.map(([a, b, c]) => {
+		const pa = at[a] ?? { x: 0, y: 0 };
+		const pb = at[b] ?? { x: 0, y: 0 };
+		const pc = at[c] ?? { x: 0, y: 0 };
+		return `${pa.x.toFixed(1)},${pa.y.toFixed(1)} ${pb.x.toFixed(1)},${pb.y.toFixed(1)} ${pc.x.toFixed(1)},${pc.y.toFixed(1)}`;
+	});
 	return {
 		width,
 		height,
 		lines,
 		dots,
+		faces,
 		pulse: pts.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" "),
 		pulseHead: head,
 	};

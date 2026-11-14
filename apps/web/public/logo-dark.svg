@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 608" width="512" height="608">
+<title>Aeon Networks</title>
+<g fill="#d9f56a">
+<polygon points="316,214 174,246 176,252 189,258 314,228"/>
+<polygon points="434,267 487,290 487,418"/>
+<polygon points="316,470 413,440 375,494"/>
+</g>
+<g stroke="#edeeea" stroke-width="5" stroke-linecap="round" fill="none">
+<line x1="255" y1="33" x2="485" y2="158"/>
+<line x1="255" y1="33" x2="25" y2="172"/>
+<line x1="255" y1="33" x2="192" y2="163"/>
+<line x1="255" y1="33" x2="319" y2="218"/>
+<line x1="485" y1="158" x2="319" y2="218"/>
+<line x1="485" y1="158" x2="369" y2="364"/>
+<line x1="485" y1="158" x2="488" y2="428"/>
+<line x1="25" y1="172" x2="192" y2="163"/>
+<line x1="25" y1="172" x2="369" y2="364"/>
+<line x1="25" y1="172" x2="27" y2="440"/>
+<line x1="25" y1="172" x2="163" y2="411"/>
+<line x1="192" y1="163" x2="319" y2="218"/>
+<line x1="192" y1="163" x2="27" y2="440"/>
+<line x1="319" y1="218" x2="369" y2="364"/>
+<line x1="319" y1="218" x2="163" y2="411"/>
+<line x1="369" y1="364" x2="488" y2="428"/>
+<line x1="369" y1="364" x2="163" y2="411"/>
+<line x1="369" y1="364" x2="256" y2="570"/>
+<line x1="488" y1="428" x2="256" y2="570"/>
+<line x1="27" y1="440" x2="163" y2="411"/>
+<line x1="27" y1="440" x2="256" y2="570"/>
+<line x1="163" y1="411" x2="256" y2="570"/>
+<line x1="319" y1="218" x2="487" y2="291"/>
+<line x1="163" y1="411" x2="377" y2="495"/>
+<line x1="427" y1="262" x2="488" y2="428"/>
+<line x1="192" y1="163" x2="163" y2="411"/>
+</g>
+<circle cx="255" cy="33" r="14" fill="#edeeea"/>
+<circle cx="485" cy="158" r="11.5" fill="#d9f56a" stroke="#edeeea" stroke-width="4"/>
+<circle cx="25" cy="172" r="11.5" fill="#d9f56a" stroke="#edeeea" stroke-width="4"/>
+<circle cx="192" cy="163" r="14" fill="#edeeea"/>
+<circle cx="319" cy="218" r="14" fill="#edeeea"/>
+<circle cx="369" cy="364" r="17" fill="#edeeea"/>
+<circle cx="488" cy="428" r="14" fill="#edeeea"/>
+<circle cx="27" cy="440" r="14" fill="#edeeea"/>
+<circle cx="163" cy="411" r="11.5" fill="#d9f56a" stroke="#edeeea" stroke-width="4"/>
+<circle cx="256" cy="570" r="11.5" fill="#d9f56a" stroke="#edeeea" stroke-width="4"/>
+</svg>
+

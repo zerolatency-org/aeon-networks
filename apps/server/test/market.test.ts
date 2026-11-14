@@ -177,7 +177,7 @@ describe("market search", () => {
 	test("GET /market/min-price returns minimum listing price", async () => {
 		const res = await t.app.request("/api/market/min-price");
 		expect(res.status).toBe(200);
-		const body = await res.json();
+		const body = (await res.json()) as Record<string, unknown>;
 		expect(body).toHaveProperty("minPriceWei");
 		expect(typeof body.minPriceWei).toBe("string");
 	});

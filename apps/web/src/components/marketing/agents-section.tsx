@@ -2,67 +2,105 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { HERO } from "@/content/marketing";
-import { featuredAgents } from "@/lib/agent-card";
+import { featuredAgents, SAMPLE_AGENTS } from "@/lib/agent-card";
 import { loadMarket } from "@/lib/market-server";
 import { AgentAvatar } from "./agent-avatar";
 
 async function Cards() {
 	const m = await loadMarket();
-	const cards = featuredAgents(m?.items ?? []);
-	if (!cards.length)
-		return (
-			<div className="glass rounded-xl p-6">
-				<p>
-					{m === null
-						? "The market is not reachable right now."
-						: "No agents are listed yet."}
-				</p>
-				<Link href={HERO.primary.href} className="text-fg-2 underline">
-					{m === null ? "Try the app" : "Mint the first one"}
+	const liveCards = featuredAgents(m?.items ?? []);
+	const isLive = liveCards.length > 0;
+	const cards = isLive ? liveCards : SAMPLE_AGENTS;
+
+	return (
+		<div>
+			<div className="mb-4 flex items-center justify-between">
+				<span className="text-fg-3 flex items-center gap-2 text-xs">
+					<span
+						className="bg-moss size-2 rounded-full motion-safe:animate-pulse"
+						aria-hidden
+					/>
+					<span>
+						{isLive
+							? "Live 0G Marketplace Registry"
+							: "0G Galileo Network Showcase (Curated Provider Agents)"}
+					</span>
+				</span>
+				<Link
+					href="/lab"
+					className="text-fg-2 hover:text-fg text-xs underline-offset-4 hover:underline"
+				>
+					Mint an agent →
 				</Link>
 			</div>
-		);
-	return (
-		<ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-			{cards.map((c) => (
-				<li
-					key={c.id}
-					className="glass flex h-[188px] flex-col gap-3 rounded-xl p-5"
-				>
-					<div className="flex items-center gap-3">
-						<AgentAvatar id={c.id} name={c.name} />
-						<h3 className="text-fg truncate font-medium">{c.name}</h3>
-					</div>
-					<p className="text-fg-2 line-clamp-2 text-sm">{c.description}</p>
-					<div className="flex flex-wrap gap-1.5">
-						{c.tags.map((t) => (
-							<Badge key={t} tone="agent">
-								{t}
-							</Badge>
-						))}
-					</div>
-					<p className="num text-fg-3 mt-auto flex justify-between text-sm">
-						<span>{c.price}</span>
-						<span>{c.jobs}</span>
-					</p>
-				</li>
-			))}
-		</ul>
+
+			<ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+				{cards.map((c) => (
+					<li
+						key={c.id}
+						className="bg-surface-1 border-border hover:border-border-strong flex h-[208px] flex-col justify-between rounded-xl border p-5 shadow-sm transition-all"
+					>
+						<div>
+							<div className="flex items-center justify-between gap-3">
+								<div className="flex items-center gap-3">
+									<AgentAvatar id={c.id} name={c.name} size={40} />
+									<h3 className="text-fg truncate text-base font-medium">
+										{c.name}
+									</h3>
+								</div>
+								<Badge tone="done">Active</Badge>
+							</div>
+
+							<p className="text-fg-2 mt-3 line-clamp-2 text-sm leading-relaxed">
+								{c.description}
+							</p>
+						</div>
+
+						<div>
+							<div className="flex flex-wrap gap-1.5 pb-3">
+								{c.tags.map((t) => (
+									<Badge key={t} tone="agent">
+										{t}
+									</Badge>
+								))}
+							</div>
+
+							<div className="border-border text-fg-3 flex items-center justify-between border-t pt-3 text-xs">
+								<span className="text-fg font-mono text-sm font-semibold">
+									{c.price}
+								</span>
+								<span className="font-mono">{c.jobs} settled</span>
+							</div>
+						</div>
+					</li>
+				))}
+			</ul>
+		</div>
 	);
 }
+
 export function AgentsSection() {
 	return (
 		<section
 			className="mx-auto max-w-[1280px] px-6 py-20"
 			aria-labelledby="agents-title"
 		>
-			<h2 id="agents-title" className="text-fg font-serif text-4xl md:text-5xl">
-				Agents on the network
-			</h2>
-			<p className="text-fg-2 mt-3 mb-8 max-w-[56ch] text-lg">
-				Real listings from the marketplace, best track record first.
-			</p>
+			<div className="flex flex-col gap-2">
+				<span className="text-iris font-mono text-xs font-semibold tracking-wider uppercase">
+					Autonomous Providers
+				</span>
+				<h2
+					id="agents-title"
+					className="text-fg font-serif text-4xl md:text-5xl"
+				>
+					Agents on the network
+				</h2>
+				<p className="text-fg-2 mt-1 mb-6 max-w-[56ch] text-lg">
+					Mint an agent, register its capabilities, and let it take verifiable
+					jobs while you sleep.
+				</p>
+			</div>
+
 			<Suspense
 				fallback={
 					<div
@@ -70,7 +108,7 @@ export function AgentsSection() {
 						aria-busy="true"
 					>
 						{[0, 1, 2, 3, 4, 5].map((i) => (
-							<Skeleton key={i} className="h-[188px] rounded-xl" />
+							<Skeleton key={i} className="h-[208px] rounded-xl" />
 						))}
 					</div>
 				}

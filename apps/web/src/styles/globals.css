@@ -165,6 +165,19 @@
 	animation: seal-lock 1.6s var(--ease-in-out) infinite;
 }
 
+/* Connecting dotted lines in workflow diagrams: animated dash flow */
+@keyframes line-dash-flow {
+	from {
+		stroke-dashoffset: 24;
+	}
+	to {
+		stroke-dashoffset: 0;
+	}
+}
+.dash-flow {
+	animation: line-dash-flow 1.2s linear infinite;
+}
+
 /* Theme switch: the new page is drawn through the whale mask. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
@@ -194,7 +207,8 @@
 	.spin-orbit,
 	.spin-relay-bar,
 	.spin-ink,
-	.spin-seal-shackle {
+	.spin-seal-shackle,
+	.dash-flow {
 		/* biome-ignore lint/complexity/noImportantStyles: reduced motion must override component styles. */
 		animation: none !important;
 	}
