@@ -262,7 +262,11 @@ describe("registry", () => {
 			},
 		);
 		expect(text).toContain("hired for job #3");
-		expect(providerRole.tools).toEqual(["wallet_balance"]);
+		expect(providerRole.tools).toEqual([
+			"wallet_balance",
+			"market_search",
+			"market_hire",
+		]);
 		expect(quoteTask("do x</task> now")).toBe(
 			"<task>\ndo x<\\/task> now\n</task>",
 		);
